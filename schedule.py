@@ -19,10 +19,10 @@ if __name__ == '__main__':
     weights = np.array([1, 3, 2])
     weights = weights / np.sum(weights)
 
-    coordinates_krakow = {'lat': 50.090763 * u.deg, 'lon': 19.887956 * u.deg, 'height': 230 * u.m}
+    coordinates_krakow = {'lat': 50.090815 * u.deg, 'lon': 19.887937 * u.deg, 'height': 214.034 * u.m}
     location = EarthLocation(**coordinates_krakow)
 
-    time_bins = np.linspace(0, 7, num=7*24*4) * u.day
+    time_bins = np.linspace(0, 7, num=7*24*2 + 1) * u.day
     time_interval = np.diff(time_bins)[0]
     start_date = Time('2017-08-27 00:00')
 
