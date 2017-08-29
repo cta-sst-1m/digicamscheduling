@@ -21,3 +21,7 @@ def intensity(date, location):
     alt = compute_sun_position(date, location).alt
 
     return compute_sun_intensity(alt)
+
+if __name__ == '__main__':
+
+    print('bla')

@@ -23,7 +23,7 @@ def write_schedule(schedule, sources, start_date, time_bins, filename):
                 source_id = np.where(schedule[..., t] == True)[0][0]
                 source = sources[source_id]
                 command_string = 'OBSERVING  ={"source": "%s", "dec": "%f", "ra": "%f"}'
-                command_string = command_string % (source['name'], source['dec'].value, source['ra'].value)
+                command_string = command_string % (source['name'], source['dec'].to('rad').value, source['ra'].to('rad').value)
                 file.write(date_string + '  ' + command_string + '\n')
 
             else:

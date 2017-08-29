@@ -61,7 +61,7 @@ def find_dynamic_priority_quality_schedule(sources_visibility, objectives):  # o
     achievement = np.zeros(schedule.shape)
 
     for time_bin in range(availability.shape[0]):
-        print('hello')
+
         if np.any(sources_visibility[..., time_bin] > 0.2):
 
             remaining_time = (objectives - np.sum(achievement, axis=1)) / objectives
