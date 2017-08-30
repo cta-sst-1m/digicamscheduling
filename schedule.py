@@ -16,6 +16,8 @@ if __name__ == '__main__':
                {'ra': 5.575539 * u.deg, 'dec': 22.014500 * u.deg, 'name': 'Crab'},
                {'ra': 16.897867 * u.deg, 'dec': 39.760201 * u.deg, 'name': 'Mrk 501'}]
 
+    units_output = 'deg'
+
     weights = np.array([1, 3, 2])
     weights = weights / np.sum(weights)
 
@@ -70,7 +72,7 @@ if __name__ == '__main__':
 
     print(priority_schedule_efficiency)
 
-    write_schedule(schedule, sources, start_date, time_bins, 'priority_schedule.txt')
+    write_schedule(schedule, sources, start_date, time_bins, 'priority_schedule.txt', units=units_output)
 
 
     availability, schedule = find_quality_schedule(sources_visibility)
@@ -92,7 +94,7 @@ if __name__ == '__main__':
 
     print(quality_schedule_efficiency)
 
-    write_schedule(schedule, sources, start_date, time_bins, 'quality_schedule.txt')
+    write_schedule(schedule, sources, start_date, time_bins, 'quality_schedule.txt', units=units_output)
 
     availability, schedule = find_dynamic_priority_quality_schedule(sources_visibility, objectives)
 
@@ -113,7 +115,7 @@ if __name__ == '__main__':
 
     print(dynamic_priority_schedule_efficiency)
 
-    write_schedule(schedule, sources, start_date, time_bins, 'dynamic_priority_schedule.txt')
+    write_schedule(schedule, sources, start_date, time_bins, 'dynamic_priority_schedule.txt', units=units_output)
 
 
     plt.show()

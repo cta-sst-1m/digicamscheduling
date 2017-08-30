@@ -1,7 +1,7 @@
 import numpy as np
 import astropy.units as u
 
-def write_schedule(schedule, sources, start_date, time_bins, filename):
+def write_schedule(schedule, sources, start_date, time_bins, filename, units='rad'):
 
     observing = False
     previous_source_name = ''
@@ -26,7 +26,7 @@ def write_schedule(schedule, sources, start_date, time_bins, filename):
                 if source['name'] != previous_source_name:
 
                     command_string = 'OBSERVING  ={"source": "%s", "dec": "%f", "ra": "%f"}'
-                    command_string = command_string % (source['name'], source['dec'].to('rad').value, source['ra'].to('rad').value)
+                    command_string = command_string % (source['name'], source['dec'].to(units).value, source['ra'].to(units).value)
                     file.write(date_string + '  ' + command_string + '\n')
 
                     previous_source_name = source['name']
