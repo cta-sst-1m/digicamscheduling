@@ -22,9 +22,9 @@ if __name__ == '__main__':
     coordinates_krakow = {'lat': 50.090815 * u.deg, 'lon': 19.887937 * u.deg, 'height': 214.034 * u.m}
     location = EarthLocation(**coordinates_krakow)
 
-    time_bins = np.linspace(0, 7, num=7*24*2 + 1) * u.day
+    time_bins = np.linspace(0, 8, num=8*24*2 + 1) * u.day
     time_interval = np.diff(time_bins)[0]
-    start_date = Time('2017-08-27 00:00')
+    start_date = Time('2017-08-26 12:00')
 
     sun_intensity = np.zeros(time_bins.shape)
     moon_intensity = np.zeros(time_bins.shape)
@@ -43,7 +43,7 @@ if __name__ == '__main__':
     sources_visibility = compute_source_visibility(source_intensity, sun_intensity, moon_intensity)
     objectives = np.array([10, 10, 20]) * u.hour
 
-    print(objectives)
+    print(objectives.to('day'))
 
     if np.sum(objectives) > (time_bins[-1] - time_bins[0]):
 
