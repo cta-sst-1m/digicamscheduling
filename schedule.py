@@ -7,7 +7,7 @@ import core.sun as sun
 import core.moon as moon
 import core.gamma_source as gamma_source
 import matplotlib.pyplot as plt
-from output.writer import write_schedule
+from inout.writer import write_schedule
 
 
 if __name__ == '__main__':

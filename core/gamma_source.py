@@ -15,9 +15,15 @@ def compute_source_position(date, location, ra, dec):
     return source_altaz
 
 
-def compute_source_intensity(alt):
+def compute_source_intensity(alt, trees=True):
 
-    return np.sin(alt) * (alt > 0 * u.deg)
+    if trees:
+
+        return np.sin(alt) * (alt > 45 * u.deg)
+
+    else:
+
+        return np.sin(alt) * (alt > 0 * u.deg)
 
 
 def intensity(date, location, ra, dec):
@@ -53,12 +59,16 @@ if __name__ == '__main__':
 
     fig, axis_1 = plt.subplots()
 
-    for i in range(len(sources)):
+    t_eff = np.sum(source_intensity*time_interval, axis=1)
+
+    source_sorted = np.argsort(t_eff)
+
+    for i in source_sorted[-10:]:
 
         axis_1.plot_date(date_for_plot.plot_date, source_intensity[i], label='%s intensity' % (sources[i]['name']), linestyle='-', marker='None')
         axis_1.set_xlabel('UTC time')
         axis_1.set_ylabel('[a.u.]', color='k')
-        axis_1.set_ylim([0, 1.2])
+        axis_1.set_ylim([0.8, 1.2])
         axis_1.tick_params('y', colors='k')
         plt.legend(loc='upper left')
         plt.gcf().autofmt_xdate()
