@@ -1,9 +1,8 @@
-from distutils.core import setup
-
+from setuptools import setup, find_packages
 setup(
     name='digicam_scheduling',
     version='0.1.0',
-    packages=['digicam_scheduling',],
+    packages=['digicam_scheduling/io', 'digicam_scheduling/core', 'digicam_scheduling/display'], # find_packages()
     url='https://github.com/calispac/digicam_scheduling',
     license='GNU GPL 3.0',
     author='Cyril Alispach',
