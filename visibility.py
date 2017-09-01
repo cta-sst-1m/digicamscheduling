@@ -7,7 +7,6 @@ import core.sun as sun
 import core.moon as moon
 import core.gamma_source as gamma_source
 import matplotlib.pyplot as plt
-from inout.writer import write_schedule
 from inout.reader import read_catalog, read_location
 
 
@@ -20,7 +19,7 @@ if __name__ == '__main__':
     coordinates_krakow = read_location(filename=location_filename)
     location = EarthLocation(**coordinates_krakow)
 
-    time_bins = np.linspace(0, 1, num=24*6*2 + 1) * u.day
+    time_bins = np.linspace(0, 1, num=24*6 + 1) * u.day
     time_interval = np.diff(time_bins)[0]
     start_date = Time('2017-08-31 12:00')
 
@@ -51,7 +50,7 @@ if __name__ == '__main__':
 
             x = (start_date + time_bins).plot_date
             y = sources_visibility[j] * sources_flux[j]
-            mask = y >= 0
+            mask = (y >= 0)
 
             axis_1.plot_date(x[mask], y[mask], label=sources[j]['name'] + ' | $t_{eff}$' + ' = {0:0.02f}'.format(t_eff[j]), linestyle='-', marker='None')
             print(sources[j]['name'] + ' {0:0.02f}'.format(t_eff[j]))

@@ -19,7 +19,7 @@ def compute_source_intensity(alt, trees=True):
 
     if trees:
 
-        return np.sin(alt) * (alt > 45 * u.deg)
+        return np.sin(alt) * (alt > 45 * u.deg) * (alt < 85 * u.deg)
 
     else:
 
@@ -41,13 +41,11 @@ if __name__ == '__main__':
     coordinates_krakow = {'lat': 50.090815 * u.deg, 'lon': 19.887937 * u.deg, 'height': 214.034 * u.m}
     location = EarthLocation(**coordinates_krakow)
 
-
-    time_bins = np.linspace(0, 7, num=500) * u.day
+    time_bins = np.linspace(0, 1, num=500) * u.day
     time_interval = np.diff(time_bins)[0]
-    start_date = Time('2017-08-27 00:00')
+    start_date = Time('2017-08-31 12:00')
     source_intensity = np.zeros((len(sources), time_bins.shape[0]))
     date_for_plot = start_date + time_bins
-
 
     for i, time in enumerate(time_bins):
 
@@ -59,16 +57,12 @@ if __name__ == '__main__':
 
     fig, axis_1 = plt.subplots()
 
-    t_eff = np.sum(source_intensity*time_interval, axis=1)
-
-    source_sorted = np.argsort(t_eff)
-
-    for i in source_sorted[-10:]:
+    for i in range(len(sources)):
 
         axis_1.plot_date(date_for_plot.plot_date, source_intensity[i], label='%s intensity' % (sources[i]['name']), linestyle='-', marker='None')
         axis_1.set_xlabel('UTC time')
         axis_1.set_ylabel('[a.u.]', color='k')
-        axis_1.set_ylim([0.8, 1.2])
+        axis_1.set_ylim([0., 1.2])
         axis_1.tick_params('y', colors='k')
         plt.legend(loc='upper left')
         plt.gcf().autofmt_xdate()
