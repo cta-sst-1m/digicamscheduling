@@ -34,37 +34,22 @@ def intensity(date, location, ra, dec):
 
 if __name__ == '__main__':
 
-    sources = [{'ra': 11.074266 * u.deg, 'dec': 38.208801 * u.deg, 'name': 'Mrk 421'},
-               {'ra': 5.575539 * u.deg, 'dec': 22.014500 * u.deg, 'name': 'Crab'},
-               {'ra': 16.897867 * u.deg, 'dec': 39.760201 * u.deg, 'name': 'Mrk 501'}]
+    from digicam_scheduling.core import moon
 
+    sources = [{'ra': 83.633212 * u.deg, 'dec': 22.01446 * u.deg, 'name': 'Crab'}, {'dec': 38.208801 * u.deg, 'name': 'Mrk 421', 'ra': 166.113808 * u.deg, 'flux': 0.3}]
     coordinates_krakow = {'lat': 50.090815 * u.deg, 'lon': 19.887937 * u.deg, 'height': 214.034 * u.m}
     location = EarthLocation(**coordinates_krakow)
 
-    time_bins = np.linspace(0, 1, num=500) * u.day
+    time_bins = np.linspace(0, 1, num=1000) * u.day
     time_interval = np.diff(time_bins)[0]
     start_date = Time('2017-08-31 12:00')
     source_intensity = np.zeros((len(sources), time_bins.shape[0]))
-    date_for_plot = start_date + time_bins
-
-    for i, time in enumerate(time_bins):
-
-        date = start_date + time
-
-        for j, source in enumerate(sources):
-
-            source_intensity[j, i] = intensity(date=date, location=location, ra=source['ra'], dec=source['dec'])
-
-    fig, axis_1 = plt.subplots()
+    date = start_date + time_bins
 
     for i in range(len(sources)):
 
-        axis_1.plot_date(date_for_plot.plot_date, source_intensity[i], label='%s intensity' % (sources[i]['name']), linestyle='-', marker='None')
-        axis_1.set_xlabel('UTC time')
-        axis_1.set_ylabel('[a.u.]', color='k')
-        axis_1.set_ylim([0., 1.2])
-        axis_1.tick_params('y', colors='k')
-        plt.legend(loc='upper left')
-        plt.gcf().autofmt_xdate()
+        altaz = compute_source_position(date=date + time_bins, location=location, ra=sources[i]['ra'], dec=sources[i]['dec'])
+
+
 
     plt.show()
