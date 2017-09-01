@@ -1,5 +1,0 @@
-numpy
-astropy
-pyastronomy
-matplotlib
-scipy
