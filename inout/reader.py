@@ -24,3 +24,11 @@ def read_location(filename):
             location['height'] = float(line[2].rstrip()) * u.m
 
     return location
+
+
+if __name__ == '__main__':
+
+
+    sources = read_catalog('../config/fact_catalog.txt')
+
+    print(sources)
