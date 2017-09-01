@@ -1,9 +1,10 @@
-from digicam_scheduling.core import gamma_source
 from astropy.time import Time
 from astropy.coordinates import EarthLocation
 import numpy as np
 import astropy.units as u
 import matplotlib.pyplot as plt
+from digicam_scheduling.core import gamma_source
+
 
 if __name__ == '__main__':
 

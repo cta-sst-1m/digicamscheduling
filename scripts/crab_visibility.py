@@ -3,9 +3,6 @@ from astropy.coordinates import EarthLocation, SkyCoord
 import astropy.units as u
 import numpy as np
 import matplotlib.pyplot as plt
-import core.sun as sun
-import core.moon as moon
-import core.gamma_source as gamma_source
 
 if __name__ == '__main__':
 
