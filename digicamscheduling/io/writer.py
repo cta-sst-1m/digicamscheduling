@@ -5,7 +5,6 @@ def write_schedule(schedule, sources, start_date, time_bins, filename, units='ra
 
     observing = False
     previous_source_name = ''
-    # observing_new_source = True
     with open(filename, 'w') as file:
 
         for t, time_bin in enumerate(time_bins):
@@ -37,6 +36,8 @@ def write_schedule(schedule, sources, start_date, time_bins, filename, units='ra
                 if observing:
                     command_string = 'SHUTDOWN'
                     file.write(date_string + '  ' + command_string + '\n')
+                    previous_source_name = ''
+
                 observing = False
 
         date += (time_bins[-1] - time_bins[-2])

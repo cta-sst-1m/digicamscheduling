@@ -1,9 +1,6 @@
 import astropy.units as u
-from astropy.time import Time
-from astropy.coordinates import EarthLocation
 from astropy.coordinates import SkyCoord, AltAz
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 def compute_source_position(date, location, ra, dec):
@@ -31,3 +28,4 @@ def intensity(date, location, ra, dec):
     alt = compute_source_position(date, location, ra, dec).alt
 
     return compute_source_intensity(alt)
+

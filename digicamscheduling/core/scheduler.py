@@ -2,11 +2,6 @@ import numpy as np
 import astropy.units as u
 from astropy.coordinates import EarthLocation
 from astropy.time import Time
-import core.sun as sun
-import core.moon as moon
-import core.gamma_source as gamma_source
-import itertools
-import math
 
 
 def compute_source_visibility(source_intensity, sun_intensity, moon_intensity):
