@@ -1,4 +1,4 @@
-# digicam_scheduling
+# digicamscheduling
 
 Scheduling package for SST-1M observations
 
