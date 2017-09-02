@@ -6,8 +6,6 @@ Scheduling package for SST-1M observations
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
-
 ```
 Numpy, Scipy, Astropy, PyAstronomy, Matplolib
 ```
@@ -21,7 +19,7 @@ cd digicamscheduling
 python setup.py build
 python setup.py install
 ```
-Try one of the files in scripts/
+Try one of the files in ''scripts/''
 
 ## Running the tests
 
