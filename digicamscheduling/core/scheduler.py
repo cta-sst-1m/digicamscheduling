@@ -4,11 +4,17 @@ from astropy.coordinates import EarthLocation
 from astropy.time import Time
 
 
-def compute_source_visibility(source_intensity, sun_intensity, moon_intensity):
+def compute_source_visibility(source_intensity, sun_intensity, moon_intensity, flux=None):
 
     source_visibility = source_intensity * (1. - sun_intensity) * (1. - moon_intensity)
 
-    return source_visibility
+    if flux is None:
+
+        return source_visibility
+
+    else:
+
+        return source_visibility * flux
 
 
 def compute_schedule_efficiency(sources_visibility, schedule, weights=None):

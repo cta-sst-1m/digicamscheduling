@@ -4,6 +4,7 @@ from astropy.coordinates import EarthLocation
 from astropy.time import Time
 from digicamscheduling.io import reader
 from digicamscheduling.core import gamma_source
+import digicamscheduling.display.plot as display
 import matplotlib.pyplot as plt
 
 
@@ -19,19 +20,16 @@ if __name__ == '__main__':
     time_bins = np.linspace(0, 0.5, num=12*2 + 1) * u.day
     time_interval = np.diff(time_bins)[0]
     start_date = Time('2017-08-31 20:00')
+    date = start_date + time_bins
 
     source_elevation = np.zeros((len(sources), time_bins.shape[0])) * u.deg
     source_azimut = np.zeros((len(sources), time_bins.shape[0])) * u.deg
 
-    for i, time in enumerate(time_bins):
+    for i, source in enumerate(sources):
 
-        date = start_date + time
-
-        for j, source in enumerate(sources):
-
-            temp = gamma_source.compute_source_position(date=date, location=location, ra=source['ra'], dec=source['dec'])
-            source_elevation[j, i] = temp.alt
-            source_azimut[j, i] = temp.az
+        temp = gamma_source.compute_source_position(date=date, location=location, ra=source['ra'], dec=source['dec'])
+        source_elevation[i] = temp.alt
+        source_azimut[i] = temp.az
 
     fig_1 = plt.figure()
     fig_2 = plt.figure()
@@ -43,23 +41,13 @@ if __name__ == '__main__':
 
     for j, source in enumerate(sources):
 
-        t = (start_date + time_bins).plot_date
         alt = source_elevation[j]
         az = source_azimut[j]
-        axis_1.plot_date(t, alt, label=sources[j]['name'], linestyle='-', marker='None')
-        axis_2.plot_date(t, az, label=sources[j]['name'], linestyle='-', marker='None')
-        axis_3.plot(az.to('radian'), (90 * u.deg - alt), label=sources[j]['name'])
+        display.plot_azimuth(date, az, axis=axis_1, label=source['name'])
+        display.plot_elevation(date, alt, axis=axis_2, label=source['name'])
+        display.plot_trajectory(az, alt, axis=axis_3, label=source['name'])
 
-    axis_1.set_xlabel('UTC time')
-    axis_2.set_xlabel('UTC time')
-    axis_1.set_ylabel('elevation [deg]')
-    axis_2.set_ylabel('azimuth [deg]')
-    axis_1.set_ylim([0, 90])
-    axis_3.set_rmax(90)
-    axis_1.legend(loc='best')
-    axis_2.legend(loc='best')
-    axis_3.legend(loc='best')
-    plt.gcf().autofmt_xdate()
+
     plt.show()
 
 
