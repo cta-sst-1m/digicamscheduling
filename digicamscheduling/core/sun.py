@@ -18,17 +18,13 @@ def compute_sun_intensity(alt):
     return alt >= - 18 * u.deg
 
 
-def compute_twilight(alt, time, type='astro'):
+def compute_night(alt, type='astronomical'):
 
-    velocity = np.diff(alt)
+    if type == 'astronomical':
 
-    if type == 'astro':
+        night = (alt <= -18 * u.deg)
 
-        start_twilight = (alt >= -12 * u.deg) * (velocity < 0.)
-        start = time[start_twilight]
-        end_twilight = np.where(alt >= -18 * u.deg)[0][0]
-
-    return
+    return night
 
 def intensity(date, location):
 

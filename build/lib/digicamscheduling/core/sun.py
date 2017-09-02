@@ -4,6 +4,7 @@ from astropy import units as u
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def compute_sun_position(date, location):
 
     altaz_coordinates = AltAz(obstime=date, location=location)
@@ -16,17 +17,14 @@ def compute_sun_intensity(alt):
 
     return alt >= - 18 * u.deg
 
-def compute_twilight(alt, time, type='astro'):
 
-    velocity = np.diff(alt)
+def compute_night(alt, type='astronomical'):
 
-    if type == 'astro':
+    if type == 'astronomical':
 
-        start_twilight = (alt >= -12 * u.deg) * (velocity < 0.)
-        start = time[start]
-        end_twilight = np.where(alt >= -18 * u.deg)[0][0]
+        night = (alt <= -18 * u.deg)
 
-    return
+    return night
 
 def intensity(date, location):
 
