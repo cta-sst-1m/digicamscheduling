@@ -1,8 +1,10 @@
 import astropy.units as u
 from astropy.coordinates import SkyCoord, AltAz
 import numpy as np
+from digicamscheduling.utils.decorator import timeit
 
 
+# @timeit
 def compute_source_position(date, location, ra, dec):
 
     altaz_coordinates = AltAz(obstime=date, location=location)

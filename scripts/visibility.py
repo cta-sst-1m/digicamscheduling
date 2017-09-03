@@ -12,8 +12,8 @@ from inout.reader import read_catalog, read_location
 
 if __name__ == '__main__':
 
-    sources_filename = 'config/' + 'fact_catalog.txt'
-    location_filename = 'config/' + 'location_krakow.txt'
+    sources_filename = '../digicamscheduling/config/' + 'fact_catalog.txt'
+    location_filename = '../digicamscheduling/config/' + 'location_krakow.txt'
 
     sources = read_catalog(sources_filename)
     coordinates_krakow = read_location(filename=location_filename)
