@@ -1,7 +1,7 @@
 import numpy as np
 import astropy.units as u
 
-def write_schedule(schedule, sources, start_date, time_bins, filename, units='rad'):
+def write_schedule(schedule, sources, start_date, time_bins, filename, units='deg'):
 
     observing = False
     previous_source_name = ''
