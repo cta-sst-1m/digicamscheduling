@@ -8,6 +8,7 @@ import digicamscheduling.core.moon as moon
 import digicamscheduling.core.gamma_source as gamma_source
 from digicamscheduling.io import writer
 from digicamscheduling.io import reader
+from digicamscheduling.utils import time
 
 import matplotlib.pyplot as plt
 
@@ -23,24 +24,30 @@ if __name__ == '__main__':
     coordinates_krakow = reader.read_location(filename=location_filename)
     location = EarthLocation(**coordinates_krakow)
 
-    time_bins = np.linspace(0, 8, num=8*24*2 + 1) * u.day
-    time_interval = np.diff(time_bins)[0]
-    start_date = Time('2017-09-11 12:00')
-    date = start_date + time_bins
+
+
+    #time_bins = np.linspace(0, 8, num=8*24*2 + 1) * u.day
+    #time_interval = np.diff(time_bins)[0]
+    start_date = Time('2017-09-23 12:00')
+    end_date = Time('2017-10-07 12:00')
+    #date = start_date + time_bins
+
+    date = time.compute_time(date_start=start_date, date_end=end_date, time_steps=15*u.min, location=location, only_night=True)
 
     sun_intensity = sun.intensity(date=date, location=location)
     moon_intensity = moon.intensity(date=date, location=location)
-    source_intensity = np.zeros((len(sources), time_bins.shape[0]))
+    source_intensity = np.zeros((len(sources), date.shape[0]))
+    altaz_moon = moon.compute_moon_position(date=date, location=location)
 
     for i, source in enumerate(sources):
 
-        source_intensity[i] = gamma_source.intensity(date=date, location=location, ra=source['ra'], dec=source['dec'])
+        source_intensity[i] = gamma_source.intensity(date=date, location=location, ra=source['ra'], dec=source['dec'], altaz_moon=altaz_moon)
 
     sources_visibility = scheduler.compute_source_visibility(source_intensity, sun_intensity, moon_intensity)
 
     availability, schedule_quality = scheduler.find_quality_schedule(sources_visibility=sources_visibility)
 
-    writer.write_schedule(schedule=schedule_quality, sources=sources, start_date=start_date, filename=output_directory + 'quality_schedule_%s.txt' % units_output, time_bins=time_bins, units=units_output)
+    writer.write_schedule(schedule=schedule_quality, sources=sources, dates=date, filename=output_directory + 'quality_schedule_%s.txt' % units_output, units=units_output)
 
     fig_1, axis_1 = plt.subplots()
     axis_1.set_title('Quality schedule')
@@ -51,11 +58,12 @@ if __name__ == '__main__':
     for i, source in enumerate(sources):
 
         if np.any(schedule_quality[i] > 0):
-            axis_1.plot_date(date.plot_date, schedule_quality[i], label=source['name'], linestyle='-', marker='None')
+            axis_1.plot_date(date.plot_date, schedule_quality[i], label=source['name'], linestyle='None'
+                             , marker='.')#, drawstyle='steps-mid')
 
     axis_1.set_xlabel('UTC time')
     axis_1.set_ylabel('[occupancy]')
-    axis_1.set_ylim([0, 1.2])
+    axis_1.set_ylim([0.1, 1.2])
     axis_1.legend(loc='best')
     plt.gcf().autofmt_xdate()
     plt.show()

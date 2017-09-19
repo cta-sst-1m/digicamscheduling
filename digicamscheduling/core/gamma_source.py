@@ -25,9 +25,24 @@ def compute_source_intensity(alt, trees=True):
         return np.sin(alt) * (alt > 0 * u.deg)
 
 
-def intensity(date, location, ra, dec):
+def intensity(date, location, ra, dec, altaz_moon=None):
 
-    alt = compute_source_position(date, location, ra, dec).alt
+    altaz_source = compute_source_position(date, location, ra, dec)
 
-    return compute_source_intensity(alt)
+    if altaz_moon is None:
+
+        return compute_source_intensity(altaz_source.alt)
+
+    else:
+
+        moon_distance = compute_moon_distance(altaz_source=altaz_source, altaz_moon=altaz_moon)
+        return compute_source_intensity(altaz_source.alt) * (moon_distance > 15 * u.deg)
+
+
+def compute_moon_distance(altaz_source, altaz_moon):
+
+    return altaz_source.separation(altaz_moon)
+
+
+
 

@@ -14,6 +14,14 @@ def compute_time(date_start, date_end, time_steps, location, only_night=True):
         position_sun = sun.compute_sun_position(date=time, location=location)
         night = sun.compute_night(alt=position_sun.alt, type='astronomical')
 
+        night_bins = np.arange(night.shape[0])[night]
+
+        for index, night_bin in enumerate(night_bins):
+
+            if night_bins[min(index+1, len(night_bins) -1)] - night_bin > 1:
+
+                night[night_bin + 1] = True
+
         return time[night]
 
     else:
