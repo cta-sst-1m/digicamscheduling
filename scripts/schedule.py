@@ -28,10 +28,12 @@ if __name__ == '__main__':
     #time_interval = np.diff(time_bins)[0]
     start_date = Time('2017-09-23 12:00')
     end_date = Time('2017-10-07 12:00')
+    time_step = 15. * u.min
     #date = start_date + time_bins
 
-    date = time.compute_time(date_start=start_date, date_end=end_date, time_steps=15*u.min, location=location, only_night=True)
+    date = time.compute_time(date_start=start_date, date_end=end_date, time_steps=time_step, location=location, only_night=True)
     objectives = np.ones(len(sources)) * date.shape[0] // len(sources)
+    slew_time = 5 * u.min / time_step.to('min')
 
 
     sun_intensity = sun.intensity(date=date, location=location)
@@ -47,7 +49,7 @@ if __name__ == '__main__':
 
     availability, schedule_quality = scheduler.find_quality_schedule(sources_visibility=sources_visibility)
     availability, schedule_quality_priority = scheduler.find_dynamic_priority_quality_schedule(
-        sources_visibility=sources_visibility, objectives=objectives)
+        sources_visibility=sources_visibility, objectives=objectives, slew_time=slew_time)
 
     writer.write_schedule(schedule=schedule_quality, sources=sources, dates=date, filename=output_directory + 'quality_schedule_%s.txt' % units_output, units=units_output)
     writer.write_schedule(schedule=schedule_quality_priority, sources=sources, dates=date, filename=output_directory + 'dynamic_priority_schedule_%s.txt' % units_output, units=units_output)

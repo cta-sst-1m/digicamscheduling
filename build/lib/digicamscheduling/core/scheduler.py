@@ -68,7 +68,7 @@ def find_dynamic_priority_quality_schedule(sources_visibility, objectives, slew_
 
     for time_bin in range(availability.shape[0]):
 
-        # if np.any(sources_visibility[..., time_bin] > 0.2):
+        if np.any(sources_visibility[..., time_bin] > 0.2):
 
             remaining_time = (objectives - achievement) / objectives
             priority_source = np.argmax(remaining_time * sources_visibility[..., time_bin] - slew_times)
@@ -78,7 +78,6 @@ def find_dynamic_priority_quality_schedule(sources_visibility, objectives, slew_
             achievement[priority_source] += sources_visibility[priority_source, time_bin]
             schedule[priority_source, time_bin] = 1
             availability[time_bin] = 1
-
 
     return availability.astype(bool), schedule.astype(bool)
 

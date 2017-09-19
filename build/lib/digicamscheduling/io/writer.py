@@ -31,7 +31,6 @@ def write_schedule(schedule, sources, dates, filename, units='deg'):
 
                     previous_source_name = source['name']
 
-
             else:
 
                 if observing:
@@ -45,4 +44,3 @@ def write_schedule(schedule, sources, dates, filename, units='deg'):
         date_string = '%s' % date.iso[0:-4]
         command_string = 'SHUTDOWN'
         file.write(date_string + '  ' + command_string)
-        old_date = date
