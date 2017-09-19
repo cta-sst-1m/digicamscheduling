@@ -55,21 +55,30 @@ def find_priority_schedule(sources_visibility, objectives):  # objectives should
 
     return availability.astype(bool), schedule.astype(bool)
 
-def find_dynamic_priority_quality_schedule(sources_visibility, objectives):  # objectives should be in number of time intervalls
+
+def find_dynamic_priority_quality_schedule(sources_visibility, objectives, slew_time=0.2):  # objectives should be in number of time intervalls
 
     availability = np.zeros(sources_visibility.shape[-1])
     schedule = np.zeros(sources_visibility.shape)
-    achievement = np.zeros(schedule.shape)
+    achievement = np.zeros(schedule.shape[0])
+
+    current_source = 0
+    slew_times = np.ones(schedule.shape[0]) * slew_time
+    slew_times[current_source] = 0
 
     for time_bin in range(availability.shape[0]):
 
-        if np.any(sources_visibility[..., time_bin] > 0.2):
+        # if np.any(sources_visibility[..., time_bin] > 0.2):
 
-            remaining_time = (objectives - np.sum(achievement, axis=1)) / objectives
-            priority_source = np.argmax(remaining_time * sources_visibility[..., time_bin])
+            remaining_time = (objectives - achievement) / objectives
+            priority_source = np.argmax(remaining_time * sources_visibility[..., time_bin] - slew_times)
+            slew_times[current_source] = slew_time
+            current_source = priority_source
+            slew_times[current_source] = 0
             achievement[priority_source] += sources_visibility[priority_source, time_bin]
             schedule[priority_source, time_bin] = 1
             availability[time_bin] = 1
+
 
     return availability.astype(bool), schedule.astype(bool)
 
