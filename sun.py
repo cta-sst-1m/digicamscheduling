@@ -10,7 +10,7 @@ from digicamscheduling.utils import time
 
 if __name__ == '__main__':
 
-    location_filename = '../digicamscheduling/config/' + 'location_krakow.txt'
+    location_filename = 'digicamscheduling/config/' + 'location_krakow.txt'
     coordinates_krakow = reader.read_location(filename=location_filename)
     location = EarthLocation(**coordinates_krakow)
 

@@ -15,10 +15,10 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
 
-    output_directory = '../digicamscheduling/samples/'
+    output_directory = 'digicamscheduling/samples/'
     units_output = 'deg'
-    catalog_filename = '../digicamscheduling/config/fact_catalog.txt'
-    location_filename = '../digicamscheduling/config/location_krakow.txt'
+    catalog_filename = 'digicamscheduling/config/fact_catalog.txt'
+    location_filename = 'digicamscheduling/config/location_krakow.txt'
 
     sources = reader.read_catalog(filename=catalog_filename)
     coordinates_krakow = reader.read_location(filename=location_filename)

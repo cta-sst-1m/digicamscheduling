@@ -10,13 +10,13 @@ from digicamscheduling.utils import time
 
 if __name__ == '__main__':
 
-    location_filename = '../digicamscheduling/config/' + 'location_krakow.txt'
+    location_filename = 'digicamscheduling/config/' + 'location_krakow.txt'
     coordinates_krakow = reader.read_location(filename=location_filename)
     location = EarthLocation(**coordinates_krakow)
 
-    start_date = Time('2017-08-31 20:00')
-    end_date = Time('2018-08-31 20:00')
-    time_steps = 15 * u.min
+    start_date = Time('2017-09-28 12:00')
+    end_date = Time('2017-09-29 12:00')
+    time_steps = 1 * u.min
     date = time.compute_time(date_start=start_date, date_end=end_date, time_steps=time_steps, location=location)
     moon_position = moon.compute_moon_position(date=date, location=location)
     moon_phase = moon.compute_moon_phase(date=date)
