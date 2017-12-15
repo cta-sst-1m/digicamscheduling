@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
     output_directory = 'digicamscheduling/samples/'
     units_output = 'deg'
-    catalog_filename = 'digicamscheduling/config/fact_catalog.txt'
+    catalog_filename = 'digicamscheduling/config/catalog.txt'
     location_filename = 'digicamscheduling/config/location_krakow.txt'
 
     sources = reader.read_catalog(filename=catalog_filename)

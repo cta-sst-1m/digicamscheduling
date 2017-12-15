@@ -12,7 +12,7 @@ from inout.reader import read_catalog, read_location
 
 if __name__ == '__main__':
 
-    sources_filename = 'digicamscheduling/config/' + 'fact_catalog.txt'
+    sources_filename = 'digicamscheduling/config/' + 'catalog.txt'
     location_filename = 'digicamscheduling/config/' + 'location_krakow.txt'
 
     sources = read_catalog(sources_filename)
@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     time_bins = np.linspace(0, 1, num=24*6 + 1) * u.day
     time_interval = np.diff(time_bins)[0]
-    start_date = Time('2017-09-25 12:00')
+    start_date = Time('2017-10-30 12:00')
 
     sun_intensity = np.zeros(time_bins.shape)
     moon_intensity = np.zeros(time_bins.shape)

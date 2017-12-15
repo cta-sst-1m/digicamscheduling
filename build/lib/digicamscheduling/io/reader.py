@@ -29,6 +29,6 @@ def read_location(filename):
 if __name__ == '__main__':
 
 
-    sources = read_catalog('../config/fact_catalog.txt')
+    sources = read_catalog('../config/catalog.txt')
 
     print(sources)
