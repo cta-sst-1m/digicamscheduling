@@ -3,6 +3,7 @@ from astropy.coordinates import EarthLocation, SkyCoord
 import astropy.units as u
 import numpy as np
 import matplotlib.pyplot as plt
+from digicamscheduling.core import sun, moon, gamma_source
 
 if __name__ == '__main__':
 
@@ -14,12 +15,12 @@ if __name__ == '__main__':
     ra = sky_coordinates.ra
     dec = sky_coordinates.dec
 
-    time_intervals = np.linspace(0, 7, num=2000) * u.day
+    time_intervals = np.linspace(0, 31, num=200) * u.day
     crab_intensity = np.zeros(time_intervals.shape[0])
     moon_intensity = np.zeros(time_intervals.shape[0])
     sun_intensity = np.zeros(time_intervals.shape[0])
 
-    time = Time('2017-08-27 00:00')
+    time = Time('2018-05-01 00:00')
     date_for_plot = time + time_intervals
 
     for i in range(time_intervals.shape[0]):

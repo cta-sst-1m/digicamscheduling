@@ -1,9 +1,9 @@
-from PyAstronomy import pyasl
-from astropy.time import Time
-from astropy.coordinates import AltAz, EarthLocation, get_moon
 import astropy.units as u
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+from PyAstronomy import pyasl
+from astropy.coordinates import AltAz, EarthLocation, get_moon
+from astropy.time import Time
 
 
 def compute_moon_phase(date):
@@ -36,7 +36,7 @@ def intensity(date, location):
 
 if __name__ == '__main__':
 
-    import sun
+    from digicamscheduling.bin import sun
 
     coordinates_krakow = {'lat': 50.090763 * u.deg, 'lon': 19.887956 * u.deg, 'height': 230 * u.m}
     location = EarthLocation(**coordinates_krakow)

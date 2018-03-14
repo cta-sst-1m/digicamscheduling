@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import numpy as np
 import astropy.units as u
 from astropy.coordinates import EarthLocation
@@ -12,10 +10,10 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import cm
 
 
-def plot_elevation():
+def main():
 
-    sources_filename = 'digicamscheduling/config/' + 'catalog.txt'
-    location_filename = 'digicamscheduling/config/' + 'location_krakow.txt'
+    sources_filename = '../config/' + 'catalog.txt'
+    location_filename = '../config/' + 'location_krakow.txt'
 
     sources = reader.read_catalog(sources_filename)
 
@@ -26,9 +24,9 @@ def plot_elevation():
     coordinates_krakow = reader.read_location(filename=location_filename)
     location = EarthLocation(**coordinates_krakow)
 
-    start_date = Time('2017-11-27 12:00')
-    end_date = Time('2017-11-28 12:00')
-    time_steps = 1 * u.min
+    start_date = Time('2018-05-01 00:00')
+    end_date = Time('2018-05-31 00:00')
+    time_steps = 60 * u.min
     date = time.compute_time(date_start=start_date, date_end=end_date, time_steps=time_steps, location=location)
     source_elevation = np.zeros((len(sources), date.shape[0])) * u.deg
     source_azimut = np.zeros((len(sources), date.shape[0])) * u.deg
@@ -38,6 +36,7 @@ def plot_elevation():
     moon_phase = np.mean(moon_phase)
 
     for i, source in enumerate(sources):
+
         temp = gamma_source.compute_source_position(date=date, location=location, ra=source['ra'], dec=source['dec'])
         source_elevation[i] = temp.alt
         source_azimut[i] = temp.az
@@ -79,4 +78,4 @@ def plot_elevation():
 
 if __name__ == '__main__':
 
-    plot_elevation()
+     main()
