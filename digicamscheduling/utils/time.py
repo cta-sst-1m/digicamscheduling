@@ -9,10 +9,16 @@ def compute_time(date_start, date_end, time_steps, location, only_night=True):
     time_bins = np.arange(0, duration, time_steps.to('day').value) * u.day
     time = date_start + time_bins
 
+    print(time)
+
     if only_night:
 
         position_sun = sun.compute_sun_position(date=time, location=location)
         night = sun.compute_night(alt=position_sun.alt, type='astronomical')
+
+        if np.all(night == False):
+
+            print('Warning')
 
         night_bins = np.arange(night.shape[0])[night]
 

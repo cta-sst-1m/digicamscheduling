@@ -16,6 +16,7 @@ def compute_moon_phase(date):
 def compute_moon_position(date, location):
 
     altaz_coordinates = AltAz(obstime=date, location=location)
+    print(altaz_coordinates)
     moon_altaz = get_moon(date).transform_to(altaz_coordinates)
 
     return moon_altaz
@@ -36,7 +37,7 @@ def intensity(date, location):
 
 if __name__ == '__main__':
 
-    from digicamscheduling.bin import sun
+    import sun
 
     coordinates_krakow = {'lat': 50.090763 * u.deg, 'lon': 19.887956 * u.deg, 'height': 230 * u.m}
     location = EarthLocation(**coordinates_krakow)

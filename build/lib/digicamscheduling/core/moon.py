@@ -1,9 +1,9 @@
-from PyAstronomy import pyasl
-from astropy.time import Time
-from astropy.coordinates import AltAz, EarthLocation, get_moon
 import astropy.units as u
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+from PyAstronomy import pyasl
+from astropy.coordinates import AltAz, EarthLocation, get_moon
+from astropy.time import Time
 
 
 def compute_moon_phase(date):

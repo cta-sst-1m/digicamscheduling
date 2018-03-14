@@ -10,26 +10,29 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import cm
 
 
-def main():
-
-    sources_filename = '../config/' + 'catalog.txt'
-    location_filename = '../config/' + 'location_krakow.txt'
+def main(sources_filename='digicamscheduling/config/catalog.txt',
+         location_filename='digicamscheduling/config/location_krakow.txt'):
 
     sources = reader.read_catalog(sources_filename)
 
     sources_names = [source['name'] for source in sources]
-    sources = [sources[sources_names.index(
-        'Crab')]]  # , sources[sources_names.index('3FGL J0509.4+0541')]]# , sources[sources_names.index('1ES 1959+650')]]
+    #sources = [sources[sources_names.index(
+    #    'Crab')]]  # , sources[sources_names.index('3FGL J0509.4+0541')]]# , sources[sources_names.index('1ES 1959+650')]]
 
     coordinates_krakow = reader.read_location(filename=location_filename)
+
+    print(coordinates_krakow)
+
     location = EarthLocation(**coordinates_krakow)
 
-    start_date = Time('2018-05-01 00:00')
-    end_date = Time('2018-05-31 00:00')
-    time_steps = 60 * u.min
+    start_date = Time('2018-06-01 00:00')
+    end_date = Time('2018-09-30 00:00')
+    time_steps = 1 * u.hour
     date = time.compute_time(date_start=start_date, date_end=end_date, time_steps=time_steps, location=location)
     source_elevation = np.zeros((len(sources), date.shape[0])) * u.deg
     source_azimut = np.zeros((len(sources), date.shape[0])) * u.deg
+
+    print(date)
 
     moon_position = moon.compute_moon_position(date=date, location=location)
     moon_phase = moon.compute_moon_phase(date=date)
@@ -78,4 +81,5 @@ def main():
 
 if __name__ == '__main__':
 
-     main()
+    main(location_filename='digicamscheduling/config/location_ohp.txt')
+    main()
