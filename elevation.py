@@ -16,23 +16,19 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
     sources = reader.read_catalog(sources_filename)
 
     sources_names = [source['name'] for source in sources]
-    #sources = [sources[sources_names.index(
-    #    'Crab')]]  # , sources[sources_names.index('3FGL J0509.4+0541')]]# , sources[sources_names.index('1ES 1959+650')]]
+    sources = [sources[sources_names.index(
+        'Crab')]]  # , sources[sources_names.index('3FGL J0509.4+0541')]]# , sources[sources_names.index('1ES 1959+650')]]
 
     coordinates_krakow = reader.read_location(filename=location_filename)
 
-    print(coordinates_krakow)
-
     location = EarthLocation(**coordinates_krakow)
 
-    start_date = Time('2018-06-01 00:00')
+    start_date = Time('2018-07-31 00:00')
     end_date = Time('2018-09-30 00:00')
-    time_steps = 1 * u.hour
+    time_steps = 0.1 * u.hour
     date = time.compute_time(date_start=start_date, date_end=end_date, time_steps=time_steps, location=location)
     source_elevation = np.zeros((len(sources), date.shape[0])) * u.deg
     source_azimut = np.zeros((len(sources), date.shape[0])) * u.deg
-
-    print(date)
 
     moon_position = moon.compute_moon_position(date=date, location=location)
     moon_phase = moon.compute_moon_phase(date=date)
@@ -44,16 +40,16 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
         source_elevation[i] = temp.alt
         source_azimut[i] = temp.az
 
-    fig_1 = plt.figure()
-    fig_2 = plt.figure()
-    fig_3 = plt.figure()
-
-    axis_1 = fig_1.add_subplot(111)
-    axis_2 = fig_2.add_subplot(111)
-    axis_3 = fig_3.add_subplot(111, projection='polar')
-
     color = iter(cm.rainbow(np.linspace(0, 1, len(sources) + 1)))
     for i, source in enumerate(sources):
+
+        fig_1 = plt.figure()
+        fig_2 = plt.figure()
+        fig_3 = plt.figure()
+
+        axis_1 = fig_1.add_subplot(111)
+        axis_2 = fig_2.add_subplot(111)
+        axis_3 = fig_3.add_subplot(111, projection='polar')
 
         c = next(color)
 
@@ -63,7 +59,7 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
             display.plot_azimuth(date, az, axis=axis_1,
                                  label=source['name'] + ', flux : {} [c.u.]'.format(source['flux']), color=c)
             display.plot_elevation(date, alt, axis=axis_2,
-                                   label=source['name'] + ', flux : {} [c.u.]'.format(source['flux']), color=c)
+                                   label=source['name'] + ', flux : {} [c.u.]'.format(source['flux']), color=c, linestyle='-', marker='None')
             display.plot_trajectory(az, alt, axis=axis_3,
                                     label=source['name'] + ', flux : {} [c.u.]'.format(source['flux']), color=c)
 
@@ -82,4 +78,4 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
 if __name__ == '__main__':
 
     main(location_filename='digicamscheduling/config/location_ohp.txt')
-    main()
+    # main()

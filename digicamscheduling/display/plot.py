@@ -19,13 +19,13 @@ def plot_azimuth(date, azimuth, axis=None, **kwargs):
     return axis
 
 
-def plot_elevation(date, elevation, axis=None, **kwargs):
+def plot_elevation(date, elevation, axis=None, linestyle='None', marker='.', **kwargs):
 
     if axis is None:
         fig = plt.figure()
         axis = fig.add_subplot(111)
 
-    axis.plot_date(date.plot_date, elevation, linestyle='None', marker='.', **kwargs)
+    axis.plot_date(date.plot_date, elevation, linestyle=linestyle, marker=marker, **kwargs)
     axis.set_xlabel('UTC time')
     axis.set_ylabel('elevation [deg]')
     axis.set_ylim([0, 90])
