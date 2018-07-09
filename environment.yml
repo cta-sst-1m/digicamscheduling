@@ -1,0 +1,13 @@
+name: digicamscheduling
+channels:
+- astropy
+- anaconda
+- defaults
+dependencies:
+- astropy
+- matplotlib
+- numpy
+- pyastronomy
+- scipy
+- pip:
+  - PyAstronomy

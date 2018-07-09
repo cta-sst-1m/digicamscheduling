@@ -16,7 +16,6 @@ def compute_moon_phase(date):
 def compute_moon_position(date, location):
 
     altaz_coordinates = AltAz(obstime=date, location=location)
-    print(altaz_coordinates)
     moon_altaz = get_moon(date).transform_to(altaz_coordinates)
 
     return moon_altaz

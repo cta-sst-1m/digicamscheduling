@@ -9,27 +9,29 @@ def compute_time(date_start, date_end, time_steps, location, only_night=True):
     time_bins = np.arange(0, duration, time_steps.to('day').value) * u.day
     time = date_start + time_bins
 
-    print(time)
-
     if only_night:
 
         position_sun = sun.compute_sun_position(date=time, location=location)
         night = sun.compute_night(alt=position_sun.alt, type='astronomical')
 
-        if np.all(night == False):
+        if (night == False).all():
 
-            print('Warning')
-
-        night_bins = np.arange(night.shape[0])[night]
-
-        for index, night_bin in enumerate(night_bins):
-
-            if night_bins[min(index+1, len(night_bins) -1)] - night_bin > 1:
-
-                night[night_bin + 1] = True
+            raise ValueError('The time specified does not'
+                             ' contain any night period !')
 
         return time[night]
 
     else:
 
         return time
+
+
+def compute_days(date_start, date_end):
+
+    time_steps = 1 * u.day
+
+    duration = date_end.jd - date_start.jd
+    time_bins = np.arange(0, duration, time_steps.to('day').value) * u.day
+    days = date_start + time_bins
+
+    return days

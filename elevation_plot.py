@@ -13,13 +13,12 @@ from tqdm import tqdm
 
 def main(sources_filename='digicamscheduling/config/catalog.txt',
          location_filename='digicamscheduling/config/location_krakow.txt'):
-
     sources = reader.read_catalog(sources_filename)
     coordinates_krakow = reader.read_location(filename=location_filename)
     location = EarthLocation(**coordinates_krakow)
 
-    start_date = Time('2018-07-09 00:00') # time should be 00:00
-    end_date = Time('2018-10-31 00:00') # time should be 00:00
+    start_date = Time('2018-07-09 00:00')  # time should be 00:00
+    end_date = Time('2018-10-31 00:00')  # time should be 00:00
     time_steps = 0.3 * u.day
     date = time.compute_time(date_start=start_date, date_end=end_date,
                              time_steps=time_steps, location=location)
@@ -33,7 +32,6 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
 
     for i, source in tqdm(enumerate(sources), total=len(sources),
                           desc='Source'):
-
         temp = gamma_source.compute_source_position(date=date,
                                                     location=location,
                                                     ra=source['ra'],
@@ -55,7 +53,8 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
         c = next(color)
         label = source['name'] + ', flux : {} [c.u.]'.format(source['flux'])
 
-        if np.any(source_elevation[i] > 45 * u.deg) or source['name'] == 'Crab':
+        if np.any(source_elevation[i] > 45 * u.deg) or source[
+            'name'] == 'Crab':
             alt = source_elevation[i]
             az = source_azimuth[i]
 
@@ -68,7 +67,6 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
                                     label=label, color=c)
 
         if i == 0:
-
             label_moon = 'Moon'
             display.plot_elevation(date, moon_position.alt, axis=axis_2,
                                    label=label_moon, color='k')
@@ -81,6 +79,5 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
 
 
 if __name__ == '__main__':
-
     main(location_filename='digicamscheduling/config/location_krakow.txt')
     # main()

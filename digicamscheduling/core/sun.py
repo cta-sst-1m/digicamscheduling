@@ -26,6 +26,7 @@ def compute_night(alt, type='astronomical'):
 
     return night
 
+
 def intensity(date, location):
 
     alt = compute_sun_position(date, location).alt
