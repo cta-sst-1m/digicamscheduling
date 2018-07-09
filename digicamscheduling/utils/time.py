@@ -3,7 +3,7 @@ import astropy.units as u
 from digicamscheduling.core import sun
 
 
-def compute_time(date_start, date_end, time_steps, location, only_night=True):
+def compute_time(date_start, date_end, time_steps, location=None, only_night=True):
 
     duration = date_end.jd - date_start.jd
     time_bins = np.arange(0, duration, time_steps.to('day').value) * u.day
