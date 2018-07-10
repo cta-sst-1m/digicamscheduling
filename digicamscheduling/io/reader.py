@@ -1,5 +1,6 @@
 import astropy.units as u
 import pandas as pd
+import numpy as np
 
 
 def read_catalog(filename):
@@ -41,6 +42,15 @@ def read_ohp_weather_data(filename):
     df = df.set_index('date')
 
     return df
+
+
+def read_environmental_limits(filename):
+
+    data = np.loadtxt(filename)
+    az = data[:, 0]
+    alt = data[:, 1]
+
+    return alt, az
 
 
 if __name__ == '__main__':
