@@ -5,9 +5,11 @@ channels:
 - defaults
 dependencies:
 - astropy
+- cython
 - matplotlib
 - numpy
-- pyastronomy
+- pandas
 - scipy
+- tqdm
 - pip:
   - PyAstronomy
