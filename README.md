@@ -14,7 +14,7 @@ Numpy, Scipy, Astropy, PyAstronomy, Matplolib
 
 
 ```
-git clone https://github.com/calispac/digicamscheduling
+git clone https://github.com/cta-sst-1m/digicamscheduling
 cd digicamscheduling
 python setup.py build
 python setup.py install
