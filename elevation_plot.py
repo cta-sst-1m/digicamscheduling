@@ -1,4 +1,5 @@
 import numpy as np
+import os
 import astropy.units as u
 from astropy.coordinates import EarthLocation
 from astropy.time import Time
@@ -7,12 +8,12 @@ from digicamscheduling.core import gamma_source, moon, sun, environement
 from digicamscheduling.utils import time
 import digicamscheduling.display.plot as display
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import cm
 from tqdm import tqdm
-from matplotlib.dates import DayLocator, HourLocator, DateFormatter, drange, date2num
+from matplotlib.dates import DateFormatter, date2num
 
 
-def plot_source(source_elevation, source_name, coordinates, extent=None):
+def plot_source(source_elevation, source_name, coordinates,
+                c_label='elevation [deg]', extent=None, **kwargs):
 
     cmap = plt.get_cmap('RdYlGn')
     cmap.set_bad(color='k', alpha=1.)
@@ -25,14 +26,29 @@ def plot_source(source_elevation, source_name, coordinates, extent=None):
                                           source_name), fontsize=12)
 
     ax = axes.imshow(source_elevation.T, aspect='auto', origin='lower',
-                     extent=extent, vmin=-90, vmax=90, cmap=cmap)
+                     extent=extent, cmap=cmap, **kwargs)
 
     axes.xaxis_date()
     axes.xaxis.set_minor_formatter(DateFormatter('%Y-%m-%d'))
     axes.set_xlabel('date')
     axes.set_ylabel('hour [UTC]')
+    axes.set_yticks(np.arange(0, 24, 1))
     fig.autofmt_xdate()
-    fig.colorbar(ax, label='elevation [deg]', extend='both')
+    fig.colorbar(ax, label=c_label, extend='both')
+
+    return fig, axes
+
+
+def plot_sun(sun_elevation, coordinates, extent, **kwargs):
+
+    fig, axes = plot_source(sun_elevation, 'Sun', coordinates, extent=extent,
+                            vmin=-90, vmax=90, **kwargs)
+
+    cs = axes.contour(sun_elevation.T, levels=[-18., -12., -6., -0.],
+                      extent=extent, cmap='binary_r')
+    contour_labels = ['Astronomical', 'Nautical', 'Civil', 'Horizon']
+    fmt = dict(zip(cs.levels, contour_labels))
+    axes.clabel(cs, fmt=fmt)
 
     return fig, axes
 
@@ -56,7 +72,7 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
 
     start_date = Time('2018-01-01') # time should be 00:00
     end_date = Time('2018-12-31')  # time should be 00:00
-    time_steps = 30 * u.minute
+    time_steps = 15 * u.minute
     hours = np.arange(0, 1, time_steps.to(u.day).value) * u.day
     hours = hours.to(u.hour)
 
@@ -91,8 +107,12 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
     moon_phase = moon_phase.reshape(-1, len(hours))
     sun_elevation = sun_elevation.reshape(-1, len(hours))
 
-    mask_sun_and_moon = (sun_elevation < -18 * u.deg) *  \
-                                        (moon_elevation < 0. * u.deg)
+    observability = (sun_elevation < -12 * u.deg) * np.cos(moon_elevation) \
+                    * (1 - moon_phase)
+
+    print(is_above_trees.shape, source_elevation.shape, observability.shape)
+    source_visibility = is_above_trees * np.sin(source_elevation) * observability
+    print(source_visibility.shape)
 
     date = date.reshape(-1, len(hours))
     date = date.datetime
@@ -101,22 +121,37 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
     extent = [days.min(), days.max(),
               hours.value.min(), hours.value.max()]
 
-    plot_source(sun_elevation.value, 'Sun', coordinates, extent=extent)
-    plot_source(moon_elevation.value, 'Moon', coordinates, extent=extent)
+    sun_fig, sun_axes = plot_sun(sun_elevation.value, coordinates,
+                                 extent=extent)
+
+    plot_source(observability, '', coordinates, extent=extent,
+                c_label='Observability []', vmin=0, vmax=1)
+
+    plot_source(moon_elevation.value, 'Moon', coordinates, extent=extent,
+                vmin=-90, vmax=90)
+    plot_source(moon_phase, 'Moon', coordinates, extent=extent,
+                c_label='phase []', vmin=0, vmax=1)
 
     for i, source in enumerate(sources):
 
         az = source_azimuth[i].value
         alt = source_elevation[i].value
-        mask = is_above_trees[i]
-        mask = mask * mask_sun_and_moon
+        visibility = source_visibility[i]
 
-        alt = np.ma.masked_array(alt, mask=~mask)
+        fig_1, temp = plot_source(alt, source['name'], coordinates,
+                                  extent=extent, vmin=-90, vmax=90)
 
-        plot_source(alt, source['name'],
-                    coordinates, extent=extent)
+        fig_2, temp = plot_source(visibility, source['name'], coordinates,
+                                  extent=extent,
+                    vmin=0, vmax=1, c_label='visibility []')
 
-        display.plot_trajectory(source_elevation[i].ravel(), source_azimuth[i].ravel())
+        path = '/home/alispach/figures/visibility/2018_observations/sources'
+        file_1 = os.path.join(path, source['name'] + '_elevation.svg')
+        file_2 = os.path.join(path, source['name'] + '_visibility.svg')
+        fig_1.savefig(file_1)
+        fig_2.savefig(file_2)
+
+        # display.plot_trajectory(source_elevation[i].ravel(), source_azimuth[i].ravel())
 
     plt.show()
 
