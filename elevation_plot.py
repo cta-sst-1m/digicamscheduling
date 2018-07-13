@@ -12,18 +12,25 @@ from tqdm import tqdm
 from matplotlib.dates import DateFormatter, date2num
 
 
-def plot_source(source_elevation, source_name, coordinates,
+def plot_source(source_elevation, coordinates, source=None,
                 c_label='elevation [deg]', extent=None, **kwargs):
 
     cmap = plt.get_cmap('RdYlGn')
     cmap.set_bad(color='k', alpha=1.)
     fig = plt.figure()
     axes = fig.add_subplot(111)
-    axes.set_title('Site : ({}, {}, {}) [lat, lon, alt]'
-                   '\nSource : {}'.format(coordinates['lat'],
-                                          coordinates['lon'],
-                                          coordinates['height'],
-                                          source_name), fontsize=12)
+
+    title = 'Site : ({}, {}, {}) [lat, lon, alt] deg'.format(
+        coordinates['lat'], coordinates['lon'], coordinates['height']
+    )
+
+    if source is not None:
+
+        title += '\nSource : {} ({}, {}) [ra, dec] deg'.format(source['name'],
+                                                               source['ra'],
+                                                                source['dec'])
+
+    axes.set_title(title, fontsize=20)
 
     ax = axes.imshow(source_elevation.T, aspect='auto', origin='lower',
                      extent=extent, cmap=cmap, **kwargs)
@@ -41,12 +48,21 @@ def plot_source(source_elevation, source_name, coordinates,
 
 def plot_sun(sun_elevation, coordinates, extent, **kwargs):
 
-    fig, axes = plot_source(sun_elevation, 'Sun', coordinates, extent=extent,
-                            vmin=-90, vmax=90, **kwargs)
+    fig, axes = plot_source(sun_elevation, coordinates, extent=extent,
+                            vmin=-90, vmax=90, **kwargs,
+                            c_label='Sun elevation [deg]')
 
     cs = axes.contour(sun_elevation.T, levels=[-18., -12., -6., -0.],
                       extent=extent, cmap='binary_r')
-    contour_labels = ['Astronomical', 'Nautical', 'Civil', 'Horizon']
+    sun_max = np.argmax(sun_elevation, axis=1)
+    days = np.linspace(extent[0], extent[1], num=len(sun_elevation))
+    hours = np.linspace(extent[2], extent[3], num=sun_elevation.shape[1])
+    hours = hours[sun_max]
+
+    axes.plot(days, hours, color='r')
+
+    contour_labels = ['Astronomical', 'Nautical', 'Civil',
+                      'Horizon']
     fmt = dict(zip(cs.levels, contour_labels))
     axes.clabel(cs, fmt=fmt)
 
@@ -58,7 +74,7 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
          environment_filename='digicamscheduling/config/environmental_limitation.txt'):
 
     sources = reader.read_catalog(sources_filename)
-    # sources = [sources[4]]
+    # sources = [sources[-1]]
     coordinates = reader.read_location(filename=location_filename)
     location = EarthLocation(**coordinates)
 
@@ -110,9 +126,7 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
     observability = (sun_elevation < -12 * u.deg) * np.cos(moon_elevation) \
                     * (1 - moon_phase)
 
-    print(is_above_trees.shape, source_elevation.shape, observability.shape)
     source_visibility = is_above_trees * np.sin(source_elevation) * observability
-    print(source_visibility.shape)
 
     date = date.reshape(-1, len(hours))
     date = date.datetime
@@ -124,13 +138,13 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
     sun_fig, sun_axes = plot_sun(sun_elevation.value, coordinates,
                                  extent=extent)
 
-    plot_source(observability, '', coordinates, extent=extent,
+    plot_source(observability, coordinates, extent=extent,
                 c_label='Observability []', vmin=0, vmax=1)
 
-    plot_source(moon_elevation.value, 'Moon', coordinates, extent=extent,
+    plot_source(moon_elevation.value, coordinates, extent=extent,
                 vmin=-90, vmax=90)
-    plot_source(moon_phase, 'Moon', coordinates, extent=extent,
-                c_label='phase []', vmin=0, vmax=1)
+    plot_source(moon_phase, coordinates, extent=extent,
+                c_label='Moon phase []', vmin=0, vmax=1)
 
     for i, source in enumerate(sources):
 
@@ -138,18 +152,18 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
         alt = source_elevation[i].value
         visibility = source_visibility[i]
 
-        fig_1, temp = plot_source(alt, source['name'], coordinates,
+        fig_1, temp = plot_source(alt, coordinates, source=source,
                                   extent=extent, vmin=-90, vmax=90)
 
-        fig_2, temp = plot_source(visibility, source['name'], coordinates,
-                                  extent=extent,
-                    vmin=0, vmax=1, c_label='visibility []')
+        fig_2, temp = plot_source(visibility, coordinates, source=source,
+                                  extent=extent, vmin=0, vmax=1,
+                                  c_label='visibility []')
 
-        path = '/home/alispach/figures/visibility/2018_observations/sources'
-        file_1 = os.path.join(path, source['name'] + '_elevation.svg')
-        file_2 = os.path.join(path, source['name'] + '_visibility.svg')
-        fig_1.savefig(file_1)
-        fig_2.savefig(file_2)
+        # path = '/home/alispach/figures/visibility/2018_observations/sources'
+        # file_1 = os.path.join(path, source['name'] + '_elevation.svg')
+        # file_2 = os.path.join(path, source['name'] + '_visibility.svg')
+        # fig_1.savefig(file_1)
+        # fig_2.savefig(file_2)
 
         # display.plot_trajectory(source_elevation[i].ravel(), source_azimuth[i].ravel())
 
