@@ -1,3 +1,27 @@
+"""
+Plot catalog
+
+Usage:
+  digicamscheduling-catalog [options]
+
+Options:
+ -h --help                   Show this screen.
+ --start_date=DATE            Starting date YYYY-MM-DD-HH:MM:SS
+                              [default: 2018-01-01 00:00:00]
+ --end_date=DATE              Ending date YYYY-MM-DD-HH:MM:SS
+                              [default: 2018-12-31 00:00:00]
+ --time_step=MINUTES          Time steps in minutes
+                              [default: 60]
+ --output_path=PATH           Path to save the figure
+                              [default: .]
+ --location_filename=PATH     PATH for location config file
+                              [default: digicamscheduling/config/location_krakow.txt]
+ --sources_filename=PATH      PATH for catalog
+                              [default: digicamscheduling/config/catalog.txt]
+ --environment_filename=PATH  PATH for environmental limitations
+                              [default: digicamscheduling/config/environmental_limitation.txt]
+"""
+from docopt import docopt
 import numpy as np
 import astropy.units as u
 from astropy.coordinates import EarthLocation
@@ -66,7 +90,6 @@ def main(sources_filename, location_filename, environment_filename,
         source_elevation = source_elevation.reshape(-1, len(hours))
         moon_separation = moon_separation.reshape(-1, len(hours))
         source_visibility = source_visibility.reshape(-1, len(hours))
-        # is_above_trees = is_above_trees.reshape(-1, len(hours))
 
         fig_1 = plt.figure()
         axes_1 = fig_1.add_subplot(111)
@@ -85,6 +108,19 @@ def main(sources_filename, location_filename, environment_filename,
 
         fig_1.savefig(filename + '_elevation.png')
         fig_2.savefig(filename + '_visibility.png')
+
+
+def entry():
+
+    args = docopt(__doc__)
+
+    main(location_filename=args['--location_filename'],
+         sources_filename=args['--sources_filename'],
+         environment_filename=args['--environment_filename'],
+         start_date=args['--start_date'],
+         end_date=args['--end_date'],
+         time_steps=float(args['--time_step']) * u.minute,
+         output_path=args['--output_path'],)
 
 
 if __name__ == '__main__':

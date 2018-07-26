@@ -18,7 +18,9 @@ setup(
     author='Cyril Alispach',
     author_email='cyril.alispach@gmail.com',
     long_description=open('README.md').read(),
+    package_data={'': ['config/*']},
     description='A package for observation scheduling in gamma-ray astronomy',
-    requires=['numpy', 'astropy', 'pyastronomy', 'matplotlib', 'scipy'],
+    requires=['numpy', 'astropy', 'pyastronomy', 'matplotlib', 'scipy',
+              'docopt'],
     entry_points=command_line_applications,
 )

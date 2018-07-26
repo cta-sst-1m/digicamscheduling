@@ -1,3 +1,29 @@
+"""
+Plot catalog
+
+Usage:
+  digicamscheduling-elevation [options]
+
+Options:
+ -h --help                   Show this screen.
+ --start_date=DATE            Starting date YYYY-MM-DD-HH:MM:SS
+                              [default: 2018-01-01 00:00:00]
+ --end_date=DATE              Ending date YYYY-MM-DD-HH:MM:SS
+                              [default: 2018-01-31 00:00:00]
+ --time_step=MINUTES          Time steps in minutes
+                              [default: 10]
+ --output_path=PATH           Path to save the figure
+                              [default: .]
+ --location_filename=PATH     PATH for location config file
+                              [default: digicamscheduling/config/location_krakow.txt]
+ --sources_filename=PATH      PATH for catalog
+                              [default: digicamscheduling/config/catalog.txt]
+ --environment_filename=PATH  PATH for environmental limitations
+                              [default: digicamscheduling/config/environmental_limitation.txt]
+ --show                       View directly the plot
+                              [default: False]
+"""
+from docopt import docopt
 import numpy as np
 import astropy.units as u
 from astropy.coordinates import EarthLocation
@@ -81,6 +107,20 @@ def main(sources_filename, location_filename, environment_filename,
     if show:
 
         plt.show()
+
+
+def entry():
+
+    args = docopt(__doc__)
+
+    main(location_filename=args['--location_filename'],
+         sources_filename=args['--sources_filename'],
+         environment_filename=args['--environment_filename'],
+         start_date=args['--start_date'],
+         end_date=args['--end_date'],
+         time_steps=float(args['--time_step']) * u.minute,
+         output_path=args['--output_path'],
+         show=args['--show'])
 
 
 if __name__ == '__main__':

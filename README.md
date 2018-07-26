@@ -7,29 +7,30 @@ Scheduling package for SST-1M observations
 ### Prerequisites
 
 ```
-Numpy, Scipy, Astropy, PyAstronomy, Matplolib, Pandas, Tqdm, Cython
+Numpy, Scipy, Astropy, PyAstronomy, Matplolib, Pandas, Tqdm, Cython, Docopt
 ```
 
-### Installing
-
+### Installing (with Anaconda)
 
 ```
 git clone https://github.com/cta-sst-1m/digicamscheduling
 cd digicamscheduling
-python setup.py build
+conda env create -f environment.yml
+source activate digicamscheduling
 python setup.py install
 ```
-Try one of the files in ''scripts/''
+Try one of command line scripts
 
-## Running the tests
+```
+digicamscheduling-sun
+digicamscheduling-moon
+digicamscheduling-catalog
+digicamscheduling-observability
+digicamscheduling-elevation
+```
 
-### Break down into end to end tests
+Use the option `--help` to see how to run the scripts
 
-
-### And coding style tests
-
-## Deployment
-
-## Built With
-
-## Contributing
+Please consider the time and time steps you use ! Memory is limited !!!
+so you cannot compute for the entire catalog for the entire year
+with 1 seconde time step.
