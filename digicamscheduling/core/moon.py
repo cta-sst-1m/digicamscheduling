@@ -21,19 +21,6 @@ def compute_moon_position(date, location):
     return moon_altaz
 
 
-def compute_moon_intensity(alt, phase):
-
-    return phase * np.sin(alt) * (alt > 0. * u.deg)
-
-
-def intensity(date, location):
-
-    alt = compute_moon_position(date, location).alt
-    phase = compute_moon_phase(date)
-
-    return compute_moon_intensity(alt, phase)
-
-
 if __name__ == '__main__':
 
     from digicamscheduling.scripts import sun

@@ -39,6 +39,7 @@ import os
 
 def main(sources_filename, location_filename, environment_filename,
          start_date, end_date, time_steps, output_path):
+
     sources = reader.read_catalog(sources_filename)
     coordinates = reader.read_location(filename=location_filename)
     location = EarthLocation(**coordinates)
@@ -47,9 +48,7 @@ def main(sources_filename, location_filename, environment_filename,
         environment_filename)
     alt_trees = alt_trees * u.deg
     az_trees = az_trees * u.deg
-    env_limits = interpolate_environmental_limits(alt_trees,
-                                                               az_trees)
-
+    env_limits = interpolate_environmental_limits(alt_trees, az_trees)
     start_date = Time(start_date)  # time should be 00:00
     end_date = Time(end_date)  # time should be 00:00
     hours = np.arange(0, 1, time_steps.to(u.day).value) * u.day
@@ -69,7 +68,8 @@ def main(sources_filename, location_filename, environment_filename,
     sun_position = sun.compute_sun_position(date=date, location=location)
     sun_elevation = sun_position.alt
 
-    observability = compute_observability(sun_elevation, moon_elevation, moon_phase)
+    observability = compute_observability(sun_elevation, moon_elevation,
+                                          moon_phase)
 
     for i, source in tqdm(enumerate(sources), total=len(sources),
                           desc='Source'):
