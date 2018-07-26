@@ -1,6 +1,5 @@
 from digicamscheduling.io import reader
 from digicamscheduling.core import environement
-from digicamscheduling.display import plot
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -13,14 +12,15 @@ def plot_trees(azimuth, elevation, axis=None, **kwargs):
         fig = plt.figure()
         axis = fig.add_subplot(111, projection='polar')
 
-    axis.fill_between(azimuth.to('radian'), 90, (90 * u.deg - elevation).to('deg'),  **kwargs)
+    r = azimuth.to('radian').value
+    theta = (90 * u.deg - elevation).to('deg').value
+
+    axis.fill_between(r, 90, theta, **kwargs)
     axis.set_rmax(90)
     axis.set_theta_zero_location("N")
     axis.set_theta_direction(-1)
     axis.set_yticks(np.arange(0, 90 + 10, 10))
     axis.set_yticklabels(axis.get_yticks()[::-1])
-    # axis.set_xticks([0, 45, 90, 135, 180, 225, 270, 315])
-    # axis.set_xticklabels([0, 45, 90, 135, 180, -135, -90, -45])
     axis.legend()
 
     return axis
@@ -29,14 +29,11 @@ def plot_trees(azimuth, elevation, axis=None, **kwargs):
 if __name__ == '__main__':
 
     filename = 'digicamscheduling/config/environmental_limitation.txt'
-    alt, az = reader.read_environmental_limits(filename)
+    alt, az = reader.read_environmental_limits(filename) * u.deg
     env_limits_function = environement.interpolate_environmental_limits(alt,
                                                                         az)
+    az = np.linspace(0, 360, num=1000) * u.deg
+    alt = env_limits_function(az) * u.deg
 
-    x = np.linspace(0, 360, num=1000) * u.deg
-
-    print(env_limits_function(x))
-
-    plot_trees(x, env_limits_function(x) * u.deg, facecolor='black', alpha=0.8)
-    # plot_trees(az * u.deg, alt * u.deg)
+    plot_trees(az, alt, facecolor='black', alpha=0.8)
     plt.show()
