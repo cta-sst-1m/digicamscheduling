@@ -106,7 +106,7 @@ def plot_source_2d(source_elevation, coordinates, source=None,
     axes.set_ylabel('hour [UTC]')
     axes.set_yticks(np.arange(0, 24, 1))
 
-    fig = plt.gcf()
+    fig = axes.get_figure()
     fig.autofmt_xdate()
     fig.colorbar(ax, label=c_label, extend='both')
 
