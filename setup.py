@@ -1,12 +1,17 @@
 from setuptools import setup, find_packages
 
-command_line_applications = {'console_scripts':
-                                 ['digicamscheduling-observability = obervability',
-                                  ],
-                                  }
+command_line_applications = {'console_scripts': [
+    'digicamscheduling-catalog=digicamscheduling.scripts.catalog:entry',
+    'digicamscheduling-elevation=digicamscheduling.scripts.elevation:entry',
+    'digicamscheduling-moon=digicamscheduling.scripts.moon:entry',
+    'digicamscheduling-observability=digicamscheduling.scripts.observability:entry',
+    'digicamscheduling-sun=digicamscheduling.scripts.sun:entry',
+],
+       }
+
 setup(
     name='digicamscheduling',
-    # version='0.2.1',
+    version='0.2.1',
     packages=find_packages(),
     url='https://github.com/calispac/digicamscheduling',
     license='GNU GPL 3.0',

@@ -36,7 +36,7 @@ def intensity(date, location):
 
 if __name__ == '__main__':
 
-    import sun
+    from digicamscheduling.scripts import sun
 
     coordinates_krakow = {'lat': 50.090763 * u.deg, 'lon': 19.887956 * u.deg, 'height': 230 * u.m}
     location = EarthLocation(**coordinates_krakow)
