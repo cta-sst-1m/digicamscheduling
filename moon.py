@@ -32,10 +32,14 @@ if __name__ == '__main__':
     axis_3 = fig_3.add_subplot(111, projection='polar')
     axis_4 = fig_4.add_subplot(111)
 
-    display.plot_azimuth(date, moon_position.az, axes=axis_1, label='Moon')
-    display.plot_elevation(date, moon_position.alt, axes=axis_2, label='Moon')
-    display.plot_trajectory(moon_position.az, moon_position.alt, axes=axis_3, label='Moon')
-    display.plot_moon_phase(date=date, phase=moon_phase, axes=axis_4, label='Moon')
+    display.plot_azimuth(date, moon_position.az, axes=axis_1,
+                         label='Moon')
+    display.plot_elevation(date, moon_position.alt, axes=axis_2,
+                           label='Moon')
+    display.plot_trajectory(moon_position.az, moon_position.alt, axes=axis_3,
+                            label='Moon')
+    display.plot_moon_phase(date=date, phase=moon_phase, axes=axis_4,
+                            label='Moon')
 
     plt.show()
 
