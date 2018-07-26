@@ -67,8 +67,6 @@ def main(location_filename, start_date, end_date, time_steps, output_path,
     moon_phase = moon_phase.reshape(-1, len(hours))
     sun_elevation = sun_elevation.reshape(-1, len(hours))
 
-    print(sun_elevation.to('deg'))
-
     fig_1 = plt.figure()
     axes_1 = fig_1.add_subplot(111)
     fig_2 = plt.figure()
