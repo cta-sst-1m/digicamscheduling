@@ -17,7 +17,9 @@ if __name__ == '__main__':
     start_date = Time('2017-09-28 12:00')
     end_date = Time('2017-09-29 12:00')
     time_steps = 1 * u.min
-    date = time.compute_time(date_start=start_date, date_end=end_date, time_steps=time_steps, location=location)
+    date = time.compute_time(date_start=start_date, date_end=end_date,
+                             time_steps=time_steps, location=location,
+                             only_night=True)
     moon_position = moon.compute_moon_position(date=date, location=location)
     moon_phase = moon.compute_moon_phase(date=date)
 
@@ -30,8 +32,8 @@ if __name__ == '__main__':
     axis_3 = fig_3.add_subplot(111, projection='polar')
     axis_4 = fig_4.add_subplot(111)
 
-    display.plot_azimuth(date, moon_position.az, axis=axis_1, label='Moon')
-    display.plot_elevation(date, moon_position.alt, axis=axis_2, label='Moon')
+    display.plot_azimuth(date, moon_position.az, axes=axis_1, label='Moon')
+    display.plot_elevation(date, moon_position.alt, axes=axis_2, label='Moon')
     display.plot_trajectory(moon_position.az, moon_position.alt, axes=axis_3, label='Moon')
     display.plot_moon_phase(date=date, phase=moon_phase, axes=axis_4, label='Moon')
 
