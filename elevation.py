@@ -18,13 +18,12 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
     coordinates_krakow = reader.read_location(filename=location_filename)
     location = EarthLocation(**coordinates_krakow)
 
-    start_date = Time('2018-07-09 00:00') # time should be 00:00
-    end_date = Time('2018-10-31 00:00') # time should be 00:00
-    time_steps = 0.3 * u.day
+    start_date = Time('2018-07-27 00:00') # time should be 00:00
+    end_date = Time('2018-08-03 00:00') # time should be 00:00
+    time_steps = 1 * u.minute
     date = time.compute_time(date_start=start_date, date_end=end_date,
                              time_steps=time_steps, location=location)
 
-    source_elevation = np.zeros((len(sources), date.shape[0])) * u.deg
     source_elevation = np.zeros((len(sources), date.shape[0])) * u.deg
     source_azimuth = np.zeros((len(sources), date.shape[0])) * u.deg
 
@@ -64,7 +63,7 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
             display.plot_elevation(date, alt, axis=axis_2,
                                    label=label, color=c, linestyle='-',
                                    marker='None')
-            display.plot_trajectory(az, alt, axis=axis_3,
+            display.plot_trajectory(az, alt, axes=axis_3,
                                     label=label, color=c)
 
         if i == 0:
@@ -75,7 +74,7 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
             display.plot_azimuth(date, moon_position.az, axis=axis_1,
                                  label=label_moon, color='k')
             display.plot_trajectory(moon_position.az, moon_position.alt,
-                                    axis=axis_3, label=label_moon, color='k')
+                                    axes=axis_3, label=label_moon, color='k')
 
     plt.show()
 

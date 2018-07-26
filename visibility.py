@@ -2,12 +2,12 @@ import numpy as np
 import astropy.units as u
 from astropy.coordinates import EarthLocation
 from astropy.time import Time
-from core.scheduler import compute_source_visibility, find_priority_schedule, compute_schedule_efficiency, find_quality_schedule, find_dynamic_priority_quality_schedule
-import core.sun as sun
-import core.moon as moon
-import core.gamma_source as gamma_source
+from digicamscheduling.core.scheduler import compute_source_visibility, find_priority_schedule, compute_schedule_efficiency, find_quality_schedule, find_dynamic_priority_quality_schedule
+import digicamscheduling.core.sun as sun
+import digicamscheduling.core.moon as moon
+import digicamscheduling.core.gamma_source as gamma_source
 import matplotlib.pyplot as plt
-from inout.reader import read_catalog, read_location
+from digicamscheduling.io.reader import read_catalog, read_location
 
 
 if __name__ == '__main__':

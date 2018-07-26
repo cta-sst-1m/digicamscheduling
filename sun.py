@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     display.plot_azimuth(date, sun_position.az, axis=axis_1, label='Sun')
     display.plot_elevation(date, sun_position.alt, axis=axis_2, label='Sun')
-    display.plot_trajectory(sun_position.az, sun_position.alt, axis=axis_3, label='Sun')
+    display.plot_trajectory(sun_position.az, sun_position.alt, axes=axis_3, label='Sun')
 
     plt.show()
 

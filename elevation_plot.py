@@ -1,80 +1,21 @@
 import numpy as np
-import os
 import astropy.units as u
 from astropy.coordinates import EarthLocation
 from astropy.time import Time
 from digicamscheduling.io import reader
 from digicamscheduling.core import gamma_source, moon, sun, environement
 from digicamscheduling.utils import time
-import digicamscheduling.display.plot as display
+from digicamscheduling.display.plot import plot_source_2d, plot_sun_2d, \
+    plot_elevation
 import matplotlib.pyplot as plt
 from tqdm import tqdm
-from matplotlib.dates import DateFormatter, date2num
+from matplotlib.dates import date2num
 
 
-def plot_source(source_elevation, coordinates, source=None,
-                c_label='elevation [deg]', extent=None, **kwargs):
-
-    cmap = plt.get_cmap('RdYlGn')
-    cmap.set_bad(color='k', alpha=1.)
-    fig = plt.figure()
-    axes = fig.add_subplot(111)
-
-    title = 'Site : ({}, {}, {}) [lat, lon, alt] deg'.format(
-        coordinates['lat'], coordinates['lon'], coordinates['height']
-    )
-
-    if source is not None:
-
-        title += '\nSource : {} ({}, {}) [ra, dec] deg'.format(source['name'],
-                                                               source['ra'],
-                                                                source['dec'])
-
-    axes.set_title(title, fontsize=20)
-
-    ax = axes.imshow(source_elevation.T, aspect='auto', origin='lower',
-                     extent=extent, cmap=cmap, **kwargs)
-
-    axes.xaxis_date()
-    axes.xaxis.set_minor_formatter(DateFormatter('%Y-%m-%d'))
-    axes.set_xlabel('date')
-    axes.set_ylabel('hour [UTC]')
-    axes.set_yticks(np.arange(0, 24, 1))
-    fig.autofmt_xdate()
-    fig.colorbar(ax, label=c_label, extend='both')
-
-    return fig, axes
-
-
-def plot_sun(sun_elevation, coordinates, extent, **kwargs):
-
-    fig, axes = plot_source(sun_elevation, coordinates, extent=extent,
-                            vmin=-90, vmax=90, **kwargs,
-                            c_label='Sun elevation [deg]')
-
-    cs = axes.contour(sun_elevation.T, levels=[-18., -12., -6., -0.],
-                      extent=extent, cmap='binary_r')
-    sun_max = np.argmax(sun_elevation, axis=1)
-    days = np.linspace(extent[0], extent[1], num=len(sun_elevation))
-    hours = np.linspace(extent[2], extent[3], num=sun_elevation.shape[1])
-    hours = hours[sun_max]
-
-    axes.plot(days, hours, color='r')
-
-    contour_labels = ['Astronomical', 'Nautical', 'Civil',
-                      'Horizon']
-    fmt = dict(zip(cs.levels, contour_labels))
-    axes.clabel(cs, fmt=fmt)
-
-    return fig, axes
-
-
-def main(sources_filename='digicamscheduling/config/catalog.txt',
-         location_filename='digicamscheduling/config/location_krakow.txt',
-         environment_filename='digicamscheduling/config/environmental_limitation.txt'):
-
+def main(sources_filename, location_filename, environment_filename,
+         start_date, end_date, time_steps):
     sources = reader.read_catalog(sources_filename)
-    # sources = [sources[-1]]
+    # sources = [sources[0]]
     coordinates = reader.read_location(filename=location_filename)
     location = EarthLocation(**coordinates)
 
@@ -86,9 +27,8 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
     env_limits = environement.interpolate_environmental_limits(alt_trees,
                                                                az_trees)
 
-    start_date = Time('2018-01-01') # time should be 00:00
-    end_date = Time('2018-12-31')  # time should be 00:00
-    time_steps = 15 * u.minute
+    start_date = Time(start_date)  # time should be 00:00
+    end_date = Time(end_date)  # time should be 00:00
     hours = np.arange(0, 1, time_steps.to(u.day).value) * u.day
     hours = hours.to(u.hour)
 
@@ -105,6 +45,8 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
     sun_position = sun.compute_sun_position(date=date, location=location)
     sun_elevation = sun_position.alt
 
+    moon_separation = np.zeros((len(sources), len(date))) * u.deg
+
     for i, source in tqdm(enumerate(sources), total=len(sources),
                           desc='Source'):
         temp = gamma_source.compute_source_position(date=date,
@@ -115,18 +57,22 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
         source_azimuth[i] = temp.az
         is_above_trees[i] = environement.is_above_environmental_limits(
             temp.alt, temp.az, env_limits)
+        moon_separation[i] = temp.separation(moon_position)
 
     source_elevation = source_elevation.reshape(len(sources), -1, len(hours))
-    source_azimuth = source_azimuth.reshape(len(sources), -1, len(hours))
+    moon_separation = moon_separation.reshape(len(sources), -1, len(hours))
     is_above_trees = is_above_trees.reshape(len(sources), -1, len(hours))
     moon_elevation = moon_elevation.reshape(-1, len(hours))
     moon_phase = moon_phase.reshape(-1, len(hours))
     sun_elevation = sun_elevation.reshape(-1, len(hours))
 
     observability = (sun_elevation < -12 * u.deg) * np.cos(moon_elevation) \
-                    * (1 - moon_phase)
+                    * (1 - moon_phase) * (moon_elevation < 0 * u.deg)
 
-    source_visibility = is_above_trees * np.sin(source_elevation) * observability
+    source_visibility = is_above_trees * np.sin(
+        source_elevation) * observability
+
+    source_visibility = source_visibility * (moon_separation > 10 * u.deg)
 
     date = date.reshape(-1, len(hours))
     date = date.datetime
@@ -135,41 +81,49 @@ def main(sources_filename='digicamscheduling/config/catalog.txt',
     extent = [days.min(), days.max(),
               hours.value.min(), hours.value.max()]
 
-    sun_fig, sun_axes = plot_sun(sun_elevation.value, coordinates,
-                                 extent=extent)
+    plot_sun_2d(sun_elevation, coordinates, extent=extent)
 
-    plot_source(observability, coordinates, extent=extent,
-                c_label='Observability []', vmin=0, vmax=1)
+    plot_source_2d(observability, coordinates, extent=extent,
+                   c_label='Observability []', vmin=0, vmax=1)
 
-    plot_source(moon_elevation.value, coordinates, extent=extent,
-                vmin=-90, vmax=90)
-    plot_source(moon_phase, coordinates, extent=extent,
-                c_label='Moon phase []', vmin=0, vmax=1)
+    plot_source_2d(moon_elevation.value, coordinates, extent=extent,
+                   vmin=-90, vmax=90, c_label='Moon elevation [deg]',
+                   cmap=plt.get_cmap('RdYlGn_r'))
+    plot_source_2d(moon_phase, coordinates, extent=extent,
+                   c_label='Moon phase []', vmin=0, vmax=1,
+                   cmap=plt.get_cmap('RdYlGn_r'))
 
     for i, source in enumerate(sources):
-
-        az = source_azimuth[i].value
-        alt = source_elevation[i].value
+        # az = source_azimuth[i]
+        alt = source_elevation[i]
+        moon_sep = moon_separation[i]
         visibility = source_visibility[i]
 
-        fig_1, temp = plot_source(alt, coordinates, source=source,
-                                  extent=extent, vmin=-90, vmax=90)
+        plot_source_2d(alt, coordinates, source=source, extent=extent,
+                       vmin=-90, vmax=90, c_label='elevation [deg]')
 
-        fig_2, temp = plot_source(visibility, coordinates, source=source,
-                                  extent=extent, vmin=0, vmax=1,
-                                  c_label='visibility []')
+        plot_source_2d(visibility, coordinates, source=source,
+                       extent=extent, vmin=0, vmax=1,
+                       c_label='visibility []')
 
-        # path = '/home/alispach/figures/visibility/2018_observations/sources'
-        # file_1 = os.path.join(path, source['name'] + '_elevation.svg')
-        # file_2 = os.path.join(path, source['name'] + '_visibility.svg')
-        # fig_1.savefig(file_1)
-        # fig_2.savefig(file_2)
-
-        # display.plot_trajectory(source_elevation[i].ravel(), source_azimuth[i].ravel())
+        plot_source_2d(moon_sep, coordinates, source=source, extent=extent,
+                       vmin=0, vmax=180, c_label='Moon separation [deg]')
 
     plt.show()
 
 
 if __name__ == '__main__':
-    main(location_filename='digicamscheduling/config/location_krakow.txt')
-    # main()
+    start_date = '2018-01-01'
+    end_date = '2018-12-31'
+    time_step = 60 * u.minute
+
+    location_filename = 'digicamscheduling/config/location_krakow.txt'
+    sources_filename = 'digicamscheduling/config/catalog.txt'
+    environment_filename = 'digicamscheduling/config/environmental_limitation.txt'
+
+    main(location_filename=location_filename,
+         sources_filename=sources_filename,
+         environment_filename=environment_filename,
+         start_date=start_date,
+         end_date=end_date,
+         time_steps=time_step)

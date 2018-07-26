@@ -32,8 +32,8 @@ if __name__ == '__main__':
 
     display.plot_azimuth(date, moon_position.az, axis=axis_1, label='Moon')
     display.plot_elevation(date, moon_position.alt, axis=axis_2, label='Moon')
-    display.plot_trajectory(moon_position.az, moon_position.alt, axis=axis_3, label='Moon')
-    display.plot_moon_phase(date=date, phase=moon_phase, axis=axis_4, label='Moon')
+    display.plot_trajectory(moon_position.az, moon_position.alt, axes=axis_3, label='Moon')
+    display.plot_moon_phase(date=date, phase=moon_phase, axes=axis_4, label='Moon')
 
     plt.show()
 
