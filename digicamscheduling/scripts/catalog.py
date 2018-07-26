@@ -28,7 +28,7 @@ from astropy.coordinates import EarthLocation
 from astropy.time import Time
 from digicamscheduling.io import reader
 from digicamscheduling.core import gamma_source, moon, sun, environement
-from digicamscheduling.core.environement import interpolate_environmental_limits
+from digicamscheduling.core.environement import interpolate_environmental_limits, compute_observability
 from digicamscheduling.utils import time
 from digicamscheduling.display.plot import plot_source_2d
 import matplotlib.pyplot as plt
@@ -69,8 +69,7 @@ def main(sources_filename, location_filename, environment_filename,
     sun_position = sun.compute_sun_position(date=date, location=location)
     sun_elevation = sun_position.alt
 
-    observability = (sun_elevation < -12 * u.deg) * np.cos(moon_elevation)
-    observability *= (1 - moon_phase) * (moon_elevation < 0 * u.deg)
+    observability = compute_observability(sun_elevation, moon_elevation, moon_phase)
 
     for i, source in tqdm(enumerate(sources), total=len(sources),
                           desc='Source'):

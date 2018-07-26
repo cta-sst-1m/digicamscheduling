@@ -21,7 +21,6 @@ Options:
  --environment_filename=PATH  PATH for environmental limitations
                               [default: digicamscheduling/config/environmental_limitation.txt]
  --show                       View directly the plot
-                              [default: False]
 """
 from docopt import docopt
 import numpy as np
@@ -30,7 +29,7 @@ from astropy.coordinates import EarthLocation
 from astropy.time import Time
 from digicamscheduling.io import reader
 from digicamscheduling.core import gamma_source, moon, sun
-from digicamscheduling.core.environement import interpolate_environmental_limits, is_above_environmental_limits
+from digicamscheduling.core.environement import interpolate_environmental_limits, is_above_environmental_limits, compute_observability
 from digicamscheduling.utils import time
 from digicamscheduling.display.plot import plot_elevation, plot_source
 import matplotlib.pyplot as plt
@@ -66,8 +65,8 @@ def main(sources_filename, location_filename, environment_filename,
     sun_position = sun.compute_sun_position(date=date, location=location)
     sun_elevation = sun_position.alt
 
-    observability = (sun_elevation < -12 * u.deg) * np.cos(moon_elevation)
-    observability *= (1 - moon_phase) * (moon_elevation < 0 * u.deg)
+    observability = compute_observability(sun_elevation, moon_elevation,
+                                          moon_phase)
 
     fig_1 = plt.figure()
     axes_1 = fig_1.add_subplot(111)
