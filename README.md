@@ -22,8 +22,6 @@ python setup.py install
 Try one of command line scripts
 
 ```
-digicamscheduling-sun
-digicamscheduling-moon
 digicamscheduling-catalog
 digicamscheduling-observability
 digicamscheduling-elevation
