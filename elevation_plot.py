@@ -16,7 +16,7 @@ from matplotlib.dates import date2num
 def main(sources_filename, location_filename, environment_filename,
          start_date, end_date, time_steps):
     sources = reader.read_catalog(sources_filename)
-    # sources = [sources[0]]
+    sources = [sources[0]]
     coordinates = reader.read_location(filename=location_filename)
     location = EarthLocation(**coordinates)
 
@@ -110,7 +110,7 @@ def main(sources_filename, location_filename, environment_filename,
 if __name__ == '__main__':
     start_date = '2018-01-01'
     end_date = '2018-12-31'
-    time_step = 60 * u.minute
+    time_step = 1 * u.minute
 
     location_filename = 'digicamscheduling/config/location_krakow.txt'
     sources_filename = 'digicamscheduling/config/catalog.txt'
