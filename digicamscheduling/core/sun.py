@@ -20,9 +20,7 @@ def compute_sun_intensity(alt):
 
 def compute_night(alt, type='astronomical'):
 
-    if type == 'astronomical':
-
-        night = (alt <= -18 * u.deg)
+    night = (alt <= -12 * u.deg)
 
     return night
 

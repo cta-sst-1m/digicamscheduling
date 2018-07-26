@@ -9,7 +9,7 @@ def read_catalog(filename):
     with open(filename) as file:
         for line in file:
             line = line.split('  ')
-            sources.append({'name': line[0], 'ra': float(line[1]) * u.deg, 'dec': float(line[2]) * u.deg, 'flux': float(line[3].rstrip())})
+            sources.append({'name': line[0], 'ra': float(line[1]) * u.deg, 'dec': float(line[2]) * u.deg, 'weight': float(line[3].rstrip())})
 
     return sources
 

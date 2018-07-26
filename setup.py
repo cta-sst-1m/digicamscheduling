@@ -1,11 +1,9 @@
 from setuptools import setup, find_packages
 
 command_line_applications = {'console_scripts':
-                                 ['digicamscheduling-test = digicamscheduling.bin.test:main',
+                                 ['digicamscheduling-observability = obervability',
                                   ],
-                             'gui_scripts':
-                                 ['digicamscheduling-elevation = digicamscheduling.bin.elevation:main']
-                             }
+                                  }
 setup(
     name='digicamscheduling',
     # version='0.2.1',

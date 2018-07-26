@@ -6,17 +6,16 @@ from digicamscheduling.io import reader
 from digicamscheduling.core import gamma_source, moon, sun, environement
 from digicamscheduling.core.environement import interpolate_environmental_limits
 from digicamscheduling.utils import time
-from digicamscheduling.display.plot import plot_source_2d, plot_sun_2d, \
-    plot_elevation
+from digicamscheduling.display.plot import plot_source_2d
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from matplotlib.dates import date2num
+import os
 
 
 def main(sources_filename, location_filename, environment_filename,
-         start_date, end_date, time_steps):
+         start_date, end_date, time_steps, output_path):
     sources = reader.read_catalog(sources_filename)
-    sources = [sources[0]]
     coordinates = reader.read_location(filename=location_filename)
     location = EarthLocation(**coordinates)
 
@@ -82,35 +81,18 @@ def main(sources_filename, location_filename, environment_filename,
                        extent=extent, vmin=0, vmax=1, axes=axes_2,
                        c_label='visibility []')
 
-        fig_1.savefig(source['name'] + '_elevation.png')
-        fig_2.savefig(source['name'] + '_visibility.png')
+        filename = os.path.join(output_path, source['name'])
 
-        plt.show()
-
-    observability = observability.reshape(-1, len(hours))
-    moon_elevation = moon_elevation.reshape(-1, len(hours))
-    moon_phase = moon_phase.reshape(-1, len(hours))
-    sun_elevation = sun_elevation.reshape(-1, len(hours))
-
-    plot_sun_2d(sun_elevation, coordinates, extent=extent)
-
-    plot_source_2d(observability, coordinates, extent=extent,
-                   c_label='Observability []', vmin=0, vmax=1)
-
-    plot_source_2d(moon_elevation.value, coordinates, extent=extent,
-                   vmin=-90, vmax=90, c_label='Moon elevation [deg]',
-                   cmap=plt.get_cmap('RdYlGn_r'))
-    plot_source_2d(moon_phase, coordinates, extent=extent,
-                   c_label='Moon phase []', vmin=0, vmax=1,
-                   cmap=plt.get_cmap('RdYlGn_r'))
-
-    plt.show()
+        fig_1.savefig(filename + '_elevation.png')
+        fig_2.savefig(filename + '_visibility.png')
 
 
 if __name__ == '__main__':
+
     start_date = '2018-01-01'
     end_date = '2018-12-31'
-    time_step = 1 * u.minute
+    time_step = 60 * u.minute
+    output_path = 'figures/'
 
     location_filename = 'digicamscheduling/config/location_krakow.txt'
     sources_filename = 'digicamscheduling/config/catalog.txt'
@@ -121,4 +103,5 @@ if __name__ == '__main__':
          environment_filename=environment_filename,
          start_date=start_date,
          end_date=end_date,
-         time_steps=time_step)
+         time_steps=time_step,
+         output_path=output_path,)

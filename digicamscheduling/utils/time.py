@@ -3,13 +3,18 @@ import astropy.units as u
 from digicamscheduling.core import sun
 
 
-def compute_time(date_start, date_end, time_steps, location=None, only_night=True):
+def compute_time(date_start, date_end, time_steps, location=None,
+                 only_night=True):
 
     duration = date_end.jd - date_start.jd
     time_bins = np.arange(0, duration, time_steps.to('day').value) * u.day
     time = date_start + time_bins
 
     if only_night:
+
+        if location is None:
+
+            raise ValueError('location is required to compute night')
 
         position_sun = sun.compute_sun_position(date=time, location=location)
         night = sun.compute_night(alt=position_sun.alt, type='astronomical')

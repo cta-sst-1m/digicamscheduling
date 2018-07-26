@@ -13,7 +13,7 @@ def plot_source(date, position, y_label='', axes=None, ylim=None, **kwargs):
     axes.plot_date(date.plot_date, position, **kwargs)
     axes.set_xlabel('UTC time')
     axes.set_ylabel(y_label)
-    if ylim is not  None:
+    if ylim is not None:
         axes.set_ylim(ylim)
     axes.legend(loc='best')
     plt.gcf().autofmt_xdate()
