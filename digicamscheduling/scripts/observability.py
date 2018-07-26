@@ -1,3 +1,26 @@
+"""
+Plot catalog
+
+Usage:
+  digicamscheduling-elevation [options]
+
+Options:
+ -h --help                   Show this screen.
+ --start_date=DATE            Starting date YYYY-MM-DD-HH:MM:SS
+                              [default: 2018-01-01 00:00:00]
+ --end_date=DATE              Ending date YYYY-MM-DD-HH:MM:SS
+                              [default: 2018-12-31 00:00:00]
+ --time_step=MINUTES          Time steps in minutes
+                              [default: 60]
+ --output_path=PATH           Path to save the figure
+                              [default: .]
+ --location_filename=PATH     PATH for location config file
+                              [default: digicamscheduling/config/location_krakow.txt]
+ --sources_filename=PATH      PATH for catalog
+ --show                       View directly the plot
+                              [default: False]
+"""
+from docopt import docopt
 import numpy as np
 import astropy.units as u
 from astropy.coordinates import EarthLocation
@@ -44,6 +67,8 @@ def main(location_filename, start_date, end_date, time_steps, output_path,
     moon_phase = moon_phase.reshape(-1, len(hours))
     sun_elevation = sun_elevation.reshape(-1, len(hours))
 
+    print(sun_elevation.to('deg'))
+
     fig_1 = plt.figure()
     axes_1 = fig_1.add_subplot(111)
     fig_2 = plt.figure()
@@ -73,6 +98,18 @@ def main(location_filename, start_date, end_date, time_steps, output_path,
     if show:
 
         plt.show()
+
+
+def entry():
+
+    args = docopt(__doc__)
+
+    main(location_filename=args['--location_filename'],
+         start_date=args['--start_date'],
+         end_date=args['--end_date'],
+         time_steps=float(args['--time_step']) * u.minute,
+         output_path=args['--output_path'],
+         show=args['--show'])
 
 
 if __name__ == '__main__':
