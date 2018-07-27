@@ -45,4 +45,9 @@ def compute_moon_distance(altaz_source, altaz_moon):
 
 
 
-
+def compute_observatility(sun_alt, moon_alt, moon_phase):
+    moon_elevation[moon_elevation < 0 * u.deg] = 0
+    observability = (sun_elevation < -12 * u.deg)
+    observability = observability * np.cos(moon_elevation)
+    observability *= (
+    1 - moon_phase * (moon_elevation > 0 * u.deg).astype(float))
