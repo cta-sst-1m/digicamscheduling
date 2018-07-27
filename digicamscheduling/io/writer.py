@@ -18,7 +18,7 @@ def write_schedule(schedule, sources, dates, filename, units='deg'):
                 if not observing:
 
                     command_string = 'STARTUP'
-                    file.write('%s' % (date - 15. * u.min).iso[0:-4] + '  ' + command_string + '\n')
+                    file.write('%s' % (date - 60. * u.min).iso[0:-4] + '  ' + command_string + '\n')
                     observing = True
 
                 source_id = np.where(schedule[..., t] == True)[0][0]

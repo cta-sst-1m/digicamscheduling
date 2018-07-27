@@ -6,6 +6,8 @@ command_line_applications = {'console_scripts': [
     'digicamscheduling-moon=digicamscheduling.scripts.moon:entry',
     'digicamscheduling-observability=digicamscheduling.scripts.observability:entry',
     'digicamscheduling-sun=digicamscheduling.scripts.sun:entry',
+    'digicamscheduling-schedule=digicamscheduling.scripts.schedule:entry',
+
 ],
        }
 
