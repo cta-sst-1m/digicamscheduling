@@ -43,3 +43,30 @@ Most of the issues appear when:
 2. Time step is too low --> Memory error
 3. Period is shorter than a day
 4. Period does not include night time (Sun elevation < -12 deg)
+
+# Examples
+
+## Twilights
+
+![](docs/figures/sun_elevation.png)
+
+## Moon
+
+![](docs/figures/moon_elevation.png)
+![](docs/figures/moon_phase.png)
+
+## Observability
+
+![](docs/figures/observability.png)
+![](docs/figures/environmental_limits.svg)
+
+## Source visibility
+
+![](docs/figures/Crab_visibility.png)
+![](docs/figures/1ES%201959+650_visibility.png)
+![](docs/figures/elevation.png)
+![](docs/figures/visibility.png)
+
+
+
+
