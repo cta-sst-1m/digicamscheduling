@@ -29,12 +29,6 @@ digicamscheduling-elevation
 
 Use the option `--help` to see how to run the scripts
 
-## Considerations
-
-Please consider the time and time steps you use ! Memory is limited !!!
-so you cannot compute for the entire catalog for the entire year
-with 1 seconde time step.
-
 ## Know issues
 
 Most of the issues appear when:
