@@ -19,7 +19,9 @@ conda env create -f environment.yml
 source activate digicamscheduling
 python setup.py install
 ```
-Try one of command line scripts
+Try one of command line scripts (at the moment you can only run these programs
+ if you are in `digicamscheduling/` otherwise you have to specify the 
+ paths of config file)
 
 ```
 digicamscheduling-catalog
