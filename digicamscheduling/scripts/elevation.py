@@ -21,6 +21,8 @@ Options:
  --environment_filename=PATH  PATH for environmental limitations
                               [default: digicamscheduling/config/environmental_limitation.txt]
  --show                       View directly the plot
+ --threshold=N                Threshold for visibility
+                              [default: 0.5]
 """
 from docopt import docopt
 import numpy as np
@@ -39,7 +41,8 @@ import os
 
 
 def main(sources_filename, location_filename, environment_filename,
-         start_date, end_date, time_steps, output_path, show=False):
+         start_date, end_date, time_steps, output_path, show=False,
+         threshold=0.5):
 
     sources = reader.read_catalog(sources_filename)
     coordinates = reader.read_location(filename=location_filename)
@@ -93,12 +96,14 @@ def main(sources_filename, location_filename, environment_filename,
         source_visibility = is_above_trees * np.sin(source_elevation)
         source_visibility *= observability * (moon_separation > 10 * u.deg)
 
-        label = source['name']
-        plot_elevation(date, source_elevation, axes=axes_1, color=c,
-                       label=label)
-        plot_source(date, source_visibility,
-                    axes=axes_2, color=c, y_label='visibility []',
-                    ylim=[0, 1], label=label)
+        if np.any(source_visibility >= threshold):
+
+            label = source['name']
+            plot_elevation(date, source_elevation, axes=axes_1, color=c,
+                           label=label)
+            plot_source(date, source_visibility,
+                        axes=axes_2, color=c, y_label='visibility []',
+                        ylim=[threshold, 1], label=label)
 
     fig_1.savefig(os.path.join(output_path, 'elevation.png'))
     fig_2.savefig(os.path.join(output_path, 'visibility.png'))
@@ -119,7 +124,8 @@ def entry():
          end_date=args['--end_date'],
          time_steps=float(args['--time_step']) * u.minute,
          output_path=args['--output_path'],
-         show=args['--show'])
+         show=args['--show'],
+         threshold=float(args['--threshold']))
 
 
 if __name__ == '__main__':

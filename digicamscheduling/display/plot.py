@@ -6,6 +6,30 @@ from matplotlib.dates import DateFormatter
 
 def plot_source(date, position, y_label='', axes=None, ylim=None, **kwargs):
 
+    """
+    fig = axes.get_figure()
+    temp = date.mjd - date.mjd.min()
+    n_days = int(temp.max())
+
+    fig, axes = plt.subplots(1, n_days, sharey=True)
+    axes[0].set_xlabel('UTC time')
+    axes[0].set_ylim(ylim)
+
+    for i, day in enumerate(range(1, n_days+1, 1)):
+
+        t = date[temp <= day].plot_date
+        y = position[temp <= day]
+
+        axes[i].plot_date(t, y, **kwargs)
+        axes[i].set_xlim(t.min(), t.max())
+        axes[i].set_ylabel(y_label)
+        if ylim is not None:
+        for tick in axes[i].get_xticklabels():
+            tick.set_rotation(45)
+    axes[-1].legend(loc='best')
+    fig.autofmt_xdate()
+
+
     if axes is None:
         fig = plt.figure()
         axes = fig.add_subplot(111)
@@ -19,6 +43,27 @@ def plot_source(date, position, y_label='', axes=None, ylim=None, **kwargs):
     plt.gcf().autofmt_xdate()
     for tick in axes.get_xticklabels():
         tick.set_rotation(45)
+
+    """
+
+    if axes is None:
+        fig = plt.figure()
+        axes = fig.add_subplot(111)
+
+    title = '\nTime start : {} Time end : {}'.format(date.min(), date.max())
+
+    axes.set_title(title, fontsize=20)
+
+    t = np.linspace(0, 1, num=len(date))
+    axes.plot(t, position, **kwargs)
+    axes.set_xlabel('time []')
+    axes.set_ylabel(y_label)
+    if ylim is not None:
+        axes.set_ylim(ylim)
+    axes.legend(loc='best')
+    # plt.gcf().autofmt_xdate()
+    # for tick in axes.get_xticklabels():
+    #    tick.set_rotation(45)
 
     return axes
 
