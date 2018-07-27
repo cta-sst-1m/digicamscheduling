@@ -2,6 +2,7 @@ import astropy.units as u
 from scipy.interpolate import interp1d
 import numpy as np
 
+
 def compute_forbidden_zone(alt, az):
 
     return alt > 45 * u.deg
