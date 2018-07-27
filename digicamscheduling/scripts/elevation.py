@@ -9,9 +9,9 @@ Options:
  --start_date=DATE            Starting date YYYY-MM-DD-HH:MM:SS
                               [default: 2018-01-01 00:00:00]
  --end_date=DATE              Ending date YYYY-MM-DD-HH:MM:SS
-                              [default: 2018-01-31 00:00:00]
+                              [default: 2018-01-15 00:00:00]
  --time_step=MINUTES          Time steps in minutes
-                              [default: 10]
+                              [default: 1]
  --output_path=PATH           Path to save the figure
                               [default: .]
  --location_filename=PATH     PATH for location config file
@@ -22,7 +22,7 @@ Options:
                               [default: digicamscheduling/config/environmental_limitation.txt]
  --show                       View directly the plot
  --threshold=N                Threshold for visibility
-                              [default: 0.5]
+                              [default: 0.0]
 """
 from docopt import docopt
 import numpy as np
