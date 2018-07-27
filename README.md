@@ -52,6 +52,10 @@ Most of the issues appear when:
 ![](docs/figures/moon_phase.png)
 
 ## Observability
+```math
+$x^3$
+```
+\(x\)
 
 ![](docs/figures/observability.png)
 ![](docs/figures/environmental_limits.svg)
