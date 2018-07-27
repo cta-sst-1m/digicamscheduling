@@ -29,7 +29,7 @@ def plot_source(date, position, y_label='', axes=None, ylim=None, **kwargs):
     axes[-1].legend(loc='best')
     fig.autofmt_xdate()
 
-
+    """
     if axes is None:
         fig = plt.figure()
         axes = fig.add_subplot(111)
@@ -44,8 +44,9 @@ def plot_source(date, position, y_label='', axes=None, ylim=None, **kwargs):
     for tick in axes.get_xticklabels():
         tick.set_rotation(45)
 
-    """
+    return axes
 
+    """
     if axes is None:
         fig = plt.figure()
         axes = fig.add_subplot(111)
@@ -66,6 +67,51 @@ def plot_source(date, position, y_label='', axes=None, ylim=None, **kwargs):
     #    tick.set_rotation(45)
 
     return axes
+    
+
+
+
+
+    if axes is None:
+
+        fig = plt.figure()
+        axes = fig.add_subplot(111)
+
+    else:
+
+        fig = axes.get_figure()
+
+    temp = date.mjd - date.mjd.min()
+    n_days = int(temp.max())
+
+    days = np.arange(0, n_days, 1)
+
+    print(temp)
+    mask = np.searchsorted(temp, days)
+    mask = date[mask].plot_date
+    print(mask, temp)
+    print(mask.shape, temp)
+
+    xlims = [(mask[i], mask[i+1]) for i in range(n_days-1)]
+    xlims = tuple(xlims)
+    print(xlims)
+
+    baxes = brokenaxes(xlims=xlims, ylims=None, d=.015, tilt=45,
+                       subplot_spec=None, fig=fig, despine=True,)
+
+    baxes.plot_date(date.plot_date, position, **kwargs)
+    baxes.set_xlabel('UTC time')
+    baxes.set_ylabel(y_label)
+    if ylim is not None:
+        axes.set_ylim(ylim)
+    baxes.legend(loc='best')
+    fig.autofmt_xdate()
+    for tick in axes.get_xticklabels():
+        tick.set_rotation(45)
+
+    return baxes
+    
+    """
 
 
 def plot_azimuth(date, azimuth, axes=None, **kwargs):
