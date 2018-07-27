@@ -11,7 +11,7 @@ Options:
  --end_date=DATE              Ending date YYYY-MM-DD-HH:MM:SS
                               [default: 2018-01-15 00:00:00]
  --time_step=MINUTES          Time steps in minutes
-                              [default: 1]
+                              [default: 5]
  --output_path=PATH           Path to save the figure
                               [default: .]
  --location_filename=PATH     PATH for location config file
@@ -95,6 +95,7 @@ def main(sources_filename, location_filename, environment_filename,
 
         source_visibility = is_above_trees * np.sin(source_elevation)
         source_visibility *= observability * (moon_separation > 10 * u.deg)
+        source_visibility *= source['weight']
 
         if np.any(source_visibility >= threshold):
 
