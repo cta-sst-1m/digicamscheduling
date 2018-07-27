@@ -52,19 +52,15 @@ Most of the issues appear when:
 ![](docs/figures/moon_phase.png)
 
 ## Observability
-```math
-$x^3$
-```
-\(x\)
 
 ![](docs/figures/observability.png)
 ![](docs/figures/environmental_limits.svg)
 
 ## Source visibility
 
-![](docs/figures/Crab_visibility.png)
+![](docs/figures/Crab_visibility.png) 
 ![](docs/figures/1ES%201959+650_visibility.png)
-![](docs/figures/elevation.png)
+![](docs/figures/elevation.png) 
 ![](docs/figures/visibility.png)
 
 
