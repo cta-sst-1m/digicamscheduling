@@ -87,7 +87,6 @@ def find_quality_schedule(sources_visibility):
     availability = np.zeros(sources_visibility.shape[-1])
     schedule = np.zeros(sources_visibility.shape)
     previous_source = None
-    new_source = None
 
     for time_bin in range(sources_visibility.shape[1]):
 
