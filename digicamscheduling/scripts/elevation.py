@@ -12,8 +12,8 @@ Options:
                               [default: 2018-01-15 00:00:00]
  --time_step=MINUTES          Time steps in minutes
                               [default: 5]
- --output_path=PATH           Path to save the figure
-                              [default: .]
+ --output_path=PATH           Path to save the figure. If not specified the
+                              figures will not be saved
  --location_filename=PATH     PATH for location config file
                               [default: digicamscheduling/config/location_krakow.txt]
  --sources_filename=PATH      PATH for catalog
@@ -106,8 +106,10 @@ def main(sources_filename, location_filename, environment_filename,
                         axes=axes_2, color=c, y_label='visibility []',
                         ylim=[threshold, 1], label=label)
 
-    fig_1.savefig(os.path.join(output_path, 'elevation.png'))
-    fig_2.savefig(os.path.join(output_path, 'visibility.png'))
+    if output_path is not None:
+
+        fig_1.savefig(os.path.join(output_path, 'elevation.png'))
+        fig_2.savefig(os.path.join(output_path, 'visibility.png'))
 
     if show:
 
@@ -117,6 +119,8 @@ def main(sources_filename, location_filename, environment_filename,
 def entry():
 
     args = docopt(__doc__)
+
+    print(args['--output_path'])
 
     main(location_filename=args['--location_filename'],
          sources_filename=args['--sources_filename'],
