@@ -101,9 +101,6 @@ def find_quality_schedule(sources_visibility):
 
                 current_source = new_source
 
-
-        print(sources_visibility[new_source, time_bin])
-        print(current_source, new_source, previous_source)
         if sources_visibility[current_source, time_bin] > 0.2:
 
             schedule[current_source, time_bin] = 1
