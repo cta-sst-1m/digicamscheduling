@@ -34,7 +34,8 @@ def read_location(filename):
 
 
 def read_ohp_weather_data(filename):
-    df = pd.read_table(filename, header=1, skip_blank_lines=True, sep=',', converters={'Date': pd.to_datetime})
+    df = pd.read_table(filename, header=1, skip_blank_lines=True, sep=',',
+                       converters={'Date': pd.to_datetime})
     names = df.columns.values.tolist()
     for i, name in enumerate(names):
         if name[0] == ' ':
@@ -62,4 +63,5 @@ if __name__ == '__main__':
 
     sources_2 = read_catalog('../config/catalog.json')
 
-    read_ohp_weather_data('/data/datasets/CTA/weather_ohp/pluie_01012008_au_01012009.txt')
+    read_ohp_weather_data('/data/datasets/CTA/weather_ohp/'
+                          'pluie_01012008_au_01012009.txt')
