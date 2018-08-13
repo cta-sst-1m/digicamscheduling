@@ -17,7 +17,7 @@ Options:
  --location_filename=PATH     PATH for location config file
                               [default: digicamscheduling/config/location_krakow.txt]
  --sources_filename=PATH      PATH for catalog
-                              [default: digicamscheduling/config/catalog.txt]
+                              [default: digicamscheduling/config/catalog.json]
  --environment_filename=PATH  PATH for environmental limitations
                               [default: digicamscheduling/config/environmental_limitation.txt]
 """
@@ -130,7 +130,7 @@ if __name__ == '__main__':
     output_path = 'figures/'
 
     location_filename = 'digicamscheduling/config/location_krakow.txt'
-    sources_filename = 'digicamscheduling/config/catalog.txt'
+    sources_filename = 'digicamscheduling/config/catalog.json'
     environment_filename = 'digicamscheduling/config/environmental_limitation.txt'
 
     main(location_filename=location_filename,

@@ -1,15 +1,20 @@
 import astropy.units as u
 import pandas as pd
 import numpy as np
+import json
 
 
 def read_catalog(filename):
-    sources = []
 
-    with open(filename) as file:
-        for line in file:
-            line = line.split('  ')
-            sources.append({'name': line[0], 'ra': float(line[1]) * u.deg, 'dec': float(line[2]) * u.deg, 'weight': float(line[3].rstrip())})
+    with open(filename, 'r') as file:
+
+        sources = json.load(file)['sources']
+
+    for source in sources:
+
+        source['ra'] = source['ra'] * u.deg
+        source['dec'] = source['dec'] * u.deg
+        source['weight'] = float(source['weight'])
 
     return sources
 
@@ -55,8 +60,6 @@ def read_environmental_limits(filename):
 
 if __name__ == '__main__':
 
-    sources = read_catalog('../config/catalog.txt')
-
-    # print(sources)
+    sources_2 = read_catalog('../config/catalog.json')
 
     read_ohp_weather_data('/data/datasets/CTA/weather_ohp/pluie_01012008_au_01012009.txt')
