@@ -86,16 +86,30 @@ def find_quality_schedule(sources_visibility):
 
     availability = np.zeros(sources_visibility.shape[-1])
     schedule = np.zeros(sources_visibility.shape)
-    what_to_observe = np.argmax(sources_visibility, axis=1)
+    previous_source = None
+    new_source = None
 
     for time_bin in range(sources_visibility.shape[1]):
 
-        what_to_observe = np.argmax(sources_visibility[:, time_bin])
+        current_source = np.argmax(sources_visibility[:, time_bin])
 
-        if sources_visibility[what_to_observe, time_bin] > 0.2:
+        if current_source == previous_source:
 
-            schedule[what_to_observe, time_bin] = 1
+            temp = np.argsort(sources_visibility[:, time_bin])
+            new_source = temp[-2]
+            if sources_visibility[new_source, time_bin] > 0.6:
+
+                current_source = new_source
+
+
+        print(sources_visibility[new_source, time_bin])
+        print(current_source, new_source, previous_source)
+        if sources_visibility[current_source, time_bin] > 0.2:
+
+            schedule[current_source, time_bin] = 1
             availability[time_bin] = 1
+
+        previous_source = current_source
 
     return availability.astype(bool), schedule.astype(bool)
 

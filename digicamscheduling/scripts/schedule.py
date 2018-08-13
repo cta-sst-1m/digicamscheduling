@@ -6,12 +6,12 @@ Usage:
 
 Options:
  -h --help                    Show this screen.
- --start_date=DATE            Starting date (UTC) YYYY-MM-DD-HH:MM:SS
+ --start_date=DATE            Starting date (UTC) YYYY-MM-DD HH:MM:SS
                               [default: 2018-01-01 00:00:00]
- --end_date=DATE              Ending date (UTC) YYYY-MM-DD-HH:MM:SS
+ --end_date=DATE              Ending date (UTC) YYYY-MM-DD HH:MM:SS
                               [default: 2018-01-15 00:00:00]
  --time_step=MINUTES          Time steps in minutes
-                              [default: 5]
+                              [default: 30]
  --location_filename=PATH     PATH for location config file
                               [default: digicamscheduling/config/location_krakow.txt]
  --sources_filename=PATH      PATH for catalog
