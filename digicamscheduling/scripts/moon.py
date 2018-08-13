@@ -14,8 +14,8 @@ if __name__ == '__main__':
     coordinates_krakow = reader.read_location(filename=location_filename)
     location = EarthLocation(**coordinates_krakow)
 
-    start_date = Time('2017-09-28 12:00')
-    end_date = Time('2017-09-29 12:00')
+    start_date = Time('2018-07-27 12:00')
+    end_date = Time('2018-07-28 12:00')
     time_steps = 1 * u.min
     date = time.compute_time(date_start=start_date, date_end=end_date,
                              time_steps=time_steps, location=location,

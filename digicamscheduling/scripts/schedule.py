@@ -31,11 +31,10 @@ from digicamscheduling.core import gamma_source, moon, sun
 from digicamscheduling.core.environement import interpolate_environmental_limits, is_above_environmental_limits, compute_observability
 from digicamscheduling.utils import time
 from digicamscheduling.core.scheduler import find_quality_schedule
-import matplotlib.pyplot as plt
-from matplotlib.pyplot import cm
 from tqdm import tqdm
 from digicamscheduling.io.writer import write_schedule
 import os
+
 
 def main(sources_filename, location_filename, environment_filename,
          start_date, end_date, time_steps, output_path):
@@ -67,16 +66,7 @@ def main(sources_filename, location_filename, environment_filename,
     observability = compute_observability(sun_elevation, moon_elevation,
                                           moon_phase)
 
-
     source_visibility  = np.zeros((len(sources), len(date)))
-    fig_1 = plt.figure()
-    axes_1 = fig_1.add_subplot(111)
-    fig_2 = plt.figure()
-    axes_2 = fig_2.add_subplot(111)
-
-    color = iter(cm.rainbow(np.linspace(0, 1, num=len(sources))))
-
-    max_visibility = np.zeros(len(date))
 
     for i, source in tqdm(enumerate(sources), total=len(sources),
                           desc='Source'):
@@ -98,7 +88,7 @@ def main(sources_filename, location_filename, environment_filename,
         source_visibility[i] = temp
 
     availability, schedule = find_quality_schedule(source_visibility)
-    filename = os.path.join(output_path, 'schedule_{}__{}.txt'.format(
+    filename = os.path.join(output_path, 'schedule_{}_{}.txt'.format(
         start_date, end_date))
     write_schedule(schedule, sources, date, filename)
 
