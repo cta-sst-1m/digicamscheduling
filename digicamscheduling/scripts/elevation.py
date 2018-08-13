@@ -120,8 +120,6 @@ def entry():
 
     args = docopt(__doc__)
 
-    print(args['--output_path'])
-
     main(location_filename=args['--location_filename'],
          sources_filename=args['--sources_filename'],
          environment_filename=args['--environment_filename'],
