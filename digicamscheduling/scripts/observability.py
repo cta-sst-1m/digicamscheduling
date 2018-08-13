@@ -6,9 +6,9 @@ Usage:
 
 Options:
  -h --help                   Show this screen.
- --start_date=DATE            Starting date YYYY-MM-DD-HH:MM:SS
+ --start_date=DATE            Starting date (UTC) YYYY-MM-DD HH:MM:SS
                               [default: 2018-01-01 00:00:00]
- --end_date=DATE              Ending date YYYY-MM-DD-HH:MM:SS
+ --end_date=DATE              Ending date (UTC) YYYY-MM-DD HH:MM:SS
                               [default: 2018-12-31 00:00:00]
  --time_step=MINUTES          Time steps in minutes
                               [default: 60]
