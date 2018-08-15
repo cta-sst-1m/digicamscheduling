@@ -141,7 +141,8 @@ if __name__ == '__main__':
 
     location_filename = 'digicamscheduling/config/location_krakow.txt'
     sources_filename = 'digicamscheduling/config/catalog.json'
-    environment_filename = 'digicamscheduling/config/environmental_limitation.txt'
+    environment_filename = 'digicamscheduling/config/' \
+                           'environmental_limitation.txt'
 
     main(location_filename=location_filename,
          sources_filename=sources_filename,

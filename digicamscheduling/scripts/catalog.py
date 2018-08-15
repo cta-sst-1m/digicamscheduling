@@ -87,7 +87,6 @@ def main(sources_filename, location_filename, environment_filename,
         source_visibility *= observability * (moon_separation > 10 * u.deg)
 
         source_elevation = source_elevation.reshape(-1, len(hours))
-        moon_separation = moon_separation.reshape(-1, len(hours))
         source_visibility = source_visibility.reshape(-1, len(hours))
 
         fig_1 = plt.figure()

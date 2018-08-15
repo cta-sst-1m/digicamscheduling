@@ -4,9 +4,11 @@ from astropy.coordinates import EarthLocation
 from astropy.time import Time
 
 
-def compute_source_visibility(source_intensity, sun_intensity, moon_intensity, flux=None):
+def compute_source_visibility(source_intensity, sun_intensity,
+                              moon_intensity, flux=None):
 
-    source_visibility = source_intensity * (1. - sun_intensity) * (1. - moon_intensity)
+    source_visibility = source_intensity * (1. - sun_intensity) * \
+                        (1. - moon_intensity)
 
     if flux is None:
 
@@ -26,13 +28,19 @@ def compute_schedule_efficiency(sources_visibility, schedule, weights=None):
     return observation_efficiency
 
 
-def find_priority_schedule(sources_visibility, objectives):  # objectives should be in number of time intervalls
+def find_priority_schedule(sources_visibility, objectives):
+    """
+    :param sources_visibility:
+    :param objectives: objectives should be in number of time intervals
+    :return:
+    """
 
     availability = np.zeros(sources_visibility.shape[-1])
     schedule = np.zeros(sources_visibility.shape)
     what_to_observe = np.argsort(objectives)
 
-    for source_id in reversed(what_to_observe):  # Loop over the sources in priority order
+    # Loop over the sources in priority order
+    for source_id in reversed(what_to_observe):
 
         n_observations = objectives[source_id]
         source_visibility = sources_visibility[source_id]
@@ -56,7 +64,14 @@ def find_priority_schedule(sources_visibility, objectives):  # objectives should
     return availability.astype(bool), schedule.astype(bool)
 
 
-def find_dynamic_priority_quality_schedule(sources_visibility, objectives, slew_time=0.2):  # objectives should be in number of time intervalls
+def find_dynamic_priority_quality_schedule(sources_visibility,
+                                           objectives, slew_time=0.2):
+    """
+    :param sources_visibility:
+    :param objectives: objectives should be in number of time intervals
+    :param slew_time:
+    :return:
+    """
 
     availability = np.zeros(sources_visibility.shape[-1])
     schedule = np.zeros(sources_visibility.shape)
@@ -71,11 +86,14 @@ def find_dynamic_priority_quality_schedule(sources_visibility, objectives, slew_
         if np.any(sources_visibility[..., time_bin] > 0.2):
 
             remaining_time = (objectives - achievement) / objectives
-            priority_source = np.argmax(remaining_time * sources_visibility[..., time_bin] - slew_times)
+            priority_source = np.argmax(remaining_time *
+                                        sources_visibility[..., time_bin]
+                                        - slew_times)
             slew_times[current_source] = slew_time
             current_source = priority_source
             slew_times[current_source] = 0
-            achievement[priority_source] += sources_visibility[priority_source, time_bin]
+            achievement[priority_source] += \
+                sources_visibility[priority_source, time_bin]
             schedule[priority_source, time_bin] = 1
             availability[time_bin] = 1
 
@@ -113,23 +131,25 @@ def find_quality_schedule(sources_visibility):
 if __name__ == '__main__':
 
     time_bins = np.linspace(0, 7, num=10) * u.day
-    sources = [{'ra': 11.074266 * u.deg, 'dec': 38.208801 * u.deg, 'name': 'Mrk 421'},
-                          {'ra': 5.575539 * u.deg, 'dec': 22.014500 * u.deg, 'name': 'Crab'},
-                          {'ra': 16.897867 * u.deg, 'dec':  39.760201 * u.deg, 'name': 'Mrk 501'}]
+    sources = [{'ra': 11.074266 * u.deg, 'dec': 38.208801 * u.deg,
+                'name': 'Mrk 421'},
+                          {'ra': 5.575539 * u.deg, 'dec': 22.014500 * u.deg,
+                           'name': 'Crab'},
+                          {'ra': 16.897867 * u.deg, 'dec':  39.760201 * u.deg,
+                           'name': 'Mrk 501'}]
 
     weights = np.array([1, 3, 2])
     weights = weights / np.sum(weights)
 
-    coordinates_krakow = {'lat': 50.090763 * u.deg, 'lon': 19.887956 * u.deg, 'height': 230 * u.m}
+    coordinates_krakow = {'lat': 50.090763 * u.deg, 'lon': 19.887956 * u.deg,
+                          'height': 230 * u.m}
     location = EarthLocation(**coordinates_krakow)
 
     time_bins = np.linspace(0, 2, num=20) * u.day
     start_date = Time('2017-08-27 00:00')
     objectives = np.array([2., 6., 1.]) * u.hour
 
-
-    # availability, best_schedule = find_schedule(location, start_date, time_bins, sources, weights, objectives, type='priority')
-
-
+    # availability, best_schedule = find_schedule(location, start_date,
+    # time_bins, sources, weights, objectives, type='priority')
     # print(availability)
     # print(best_schedule)
