@@ -28,7 +28,9 @@ from astropy.coordinates import EarthLocation
 from astropy.time import Time
 from digicamscheduling.io import reader
 from digicamscheduling.core import gamma_source, moon, sun
-from digicamscheduling.core.environement import interpolate_environmental_limits, is_above_environmental_limits, compute_observability
+from digicamscheduling.core.environement import \
+    interpolate_environmental_limits, is_above_environmental_limits,\
+    compute_observability
 from digicamscheduling.utils import time
 from digicamscheduling.core.scheduler import find_quality_schedule
 from tqdm import tqdm
@@ -66,7 +68,7 @@ def main(sources_filename, location_filename, environment_filename,
     observability = compute_observability(sun_elevation, moon_elevation,
                                           moon_phase)
 
-    source_visibility  = np.zeros((len(sources), len(date)))
+    source_visibility = np.zeros((len(sources), len(date)))
 
     for i, source in tqdm(enumerate(sources), total=len(sources),
                           desc='Source'):
@@ -115,7 +117,8 @@ if __name__ == '__main__':
     output_path = '.'
     location_filename = 'digicamscheduling/config/location_krakow.txt'
     sources_filename = 'digicamscheduling/config/catalog.json'
-    environment_filename = 'digicamscheduling/config/environmental_limitation.txt'
+    environment_filename = 'digicamscheduling/config/' \
+                           'environmental_limitation.txt'
 
     main(location_filename=location_filename,
          sources_filename=sources_filename,

@@ -19,14 +19,23 @@ conda env create -f environment.yml
 source activate digicamscheduling
 python setup.py install
 ```
-Try one of command line scripts (at the moment you can only run these programs
+Try one of command line scripts (**at the moment you can only run these programs
  if you are in `digicamscheduling/` otherwise you have to specify the 
- paths of config file)
+ paths of config files**)
 
 ```
 digicamscheduling-catalog
 digicamscheduling-observability
 digicamscheduling-elevation
+digicamscheduling-moon
+digicamscheduling-schedule
+```
+
+Example of usage
+
+```
+digicamscheduling-elevation --start_date='2018-08-15 12:00' --end_date='2018-08-16 12:00' --time_step=1 --show
+digicamscheduling-schedule --start_date='2018-08-15 12:00' --end_date='2018-08-16 12:00' --time_step=30 --show
 ```
 
 Use the option `--help` to see how to run the scripts
