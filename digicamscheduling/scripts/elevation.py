@@ -11,7 +11,7 @@ Options:
  --end_date=DATE              Ending date (UTC) YYYY-MM-DD HH:MM:SS
                               [default: 2018-01-15 00:00:00]
  --time_step=MINUTES          Time steps in minutes
-                              [default: 5]
+                              [default: 1]
  --output_path=PATH           Path to save the figure. If not specified the
                               figures will not be saved
  --location_filename=PATH     PATH for location config file
