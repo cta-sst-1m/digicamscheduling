@@ -23,6 +23,8 @@ Options:
  --show                       View directly the plot
  --threshold=N                Threshold for visibility
                               [default: 0.0]
+ --use_moon                   Choose to use moon to compute source visibility
+                              [Default: False]
 """
 from docopt import docopt
 import numpy as np
@@ -41,7 +43,7 @@ import os
 
 
 def main(sources_filename, location_filename, environment_filename,
-         start_date, end_date, time_steps, output_path, show=False,
+         start_date, end_date, time_steps, output_path, use_moon, show=False,
          threshold=0.5):
 
     sources = reader.read_catalog(sources_filename)
@@ -69,7 +71,7 @@ def main(sources_filename, location_filename, environment_filename,
     sun_elevation = sun_position.alt
 
     observability = compute_observability(sun_elevation, moon_elevation,
-                                          moon_phase)
+                                          moon_phase, use_moon=use_moon)
 
     fig_1 = plt.figure()
     axes_1 = fig_1.add_subplot(111)
@@ -128,7 +130,8 @@ def entry():
          time_steps=float(args['--time_step']) * u.minute,
          output_path=args['--output_path'],
          show=args['--show'],
-         threshold=float(args['--threshold']))
+         threshold=float(args['--threshold']),
+         use_moon=args['--use_moon'])
 
 
 if __name__ == '__main__':

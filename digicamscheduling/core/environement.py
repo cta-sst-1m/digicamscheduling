@@ -24,7 +24,7 @@ def is_above_environmental_limits(alt, az, environmental_limits):
     return alt > (environmental_limits(az))
 
 
-def compute_observability(sun_elevation, moon_alt, moon_ph):
+def compute_observability(sun_elevation, moon_alt, moon_ph, use_moon=True):
 
     moon_elevation = moon_alt.copy()
     moon_phase = moon_ph.copy()
@@ -32,7 +32,10 @@ def compute_observability(sun_elevation, moon_alt, moon_ph):
     moon_phase[(moon_elevation < 0 * u.deg)] = 0.
     moon_elevation[(moon_elevation < 0 * u.deg)] = 0 * u.deg
     observability = (sun_elevation < -12 * u.deg)
-    observability = observability * np.cos(moon_elevation)
-    observability = observability * (1. - moon_phase)
+
+    if use_moon:
+
+        observability = observability * np.cos(moon_elevation)
+        observability = observability * (1. - moon_phase)
 
     return observability
