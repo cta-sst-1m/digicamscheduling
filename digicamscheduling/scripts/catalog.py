@@ -28,7 +28,8 @@ from astropy.coordinates import EarthLocation
 from astropy.time import Time
 from digicamscheduling.io import reader
 from digicamscheduling.core import gamma_source, moon, sun, environement
-from digicamscheduling.core.environement import interpolate_environmental_limits, compute_observability
+from digicamscheduling.core.environement import \
+    interpolate_environmental_limits, compute_observability
 from digicamscheduling.utils import time
 from digicamscheduling.display.plot import plot_source_2d
 import matplotlib.pyplot as plt
@@ -130,7 +131,8 @@ if __name__ == '__main__':
 
     location_filename = 'digicamscheduling/config/location_krakow.txt'
     sources_filename = 'digicamscheduling/config/catalog.json'
-    environment_filename = 'digicamscheduling/config/environmental_limitation.txt'
+    environment_filename = 'digicamscheduling/config/' \
+                           'environmental_limitation.txt'
 
     main(location_filename=location_filename,
          sources_filename=sources_filename,

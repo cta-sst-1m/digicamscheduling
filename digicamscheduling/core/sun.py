@@ -78,5 +78,3 @@ if __name__ == '__main__':
     axis_2.tick_params('y', colors='r')
     plt.legend(loc='upper right')
     plt.show()
-
-

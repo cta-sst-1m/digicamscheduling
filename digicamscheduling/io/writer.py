@@ -7,6 +7,7 @@ def write_schedule(schedule, sources, dates, filename, units='deg'):
     observing = False
     previous_source_name = ''
     n_steps = len(dates)
+    schedule = schedule.astype(bool)
 
     with open(filename, 'w') as file:
 
@@ -18,7 +19,7 @@ def write_schedule(schedule, sources, dates, filename, units='deg'):
 
             date_string = '%s' % date.iso[0:-4]
 
-            if np.any(schedule[..., t] == True):
+            if np.any(schedule[..., t]):
 
                 if not observing:
 
@@ -30,7 +31,7 @@ def write_schedule(schedule, sources, dates, filename, units='deg'):
 
                     observing = True
 
-                source_id = np.where(schedule[..., t] == True)[0][0]
+                source_id = np.where(schedule[..., t])[0][0]
                 source = sources[source_id]
                 if source['name'] != previous_source_name:
 

@@ -35,8 +35,9 @@ def intensity(date, location, ra, dec, altaz_moon=None):
 
         moon_distance = compute_moon_distance(altaz_source=altaz_source,
                                               altaz_moon=altaz_moon)
-        return compute_source_intensity(altaz_source.alt) * \
-               (moon_distance > 15 * u.deg)
+        source_intensity = compute_source_intensity(altaz_source.alt)
+        source_intensity *= (moon_distance > 15 * u.deg)
+        return source_intensity
 
 
 def compute_moon_distance(altaz_source, altaz_moon):

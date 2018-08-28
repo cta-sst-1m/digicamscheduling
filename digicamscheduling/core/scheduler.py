@@ -133,10 +133,10 @@ if __name__ == '__main__':
     time_bins = np.linspace(0, 7, num=10) * u.day
     sources = [{'ra': 11.074266 * u.deg, 'dec': 38.208801 * u.deg,
                 'name': 'Mrk 421'},
-                          {'ra': 5.575539 * u.deg, 'dec': 22.014500 * u.deg,
-                           'name': 'Crab'},
-                          {'ra': 16.897867 * u.deg, 'dec':  39.760201 * u.deg,
-                           'name': 'Mrk 501'}]
+               {'ra': 5.575539 * u.deg, 'dec': 22.014500 * u.deg,
+                'name': 'Crab'},
+               {'ra': 16.897867 * u.deg, 'dec':  39.760201 * u.deg,
+                'name': 'Mrk 501'}]
 
     weights = np.array([1, 3, 2])
     weights = weights / np.sum(weights)

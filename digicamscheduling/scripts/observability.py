@@ -16,7 +16,6 @@ Options:
                               [default: .]
  --location_filename=PATH     PATH for location config file
                               [default: digicamscheduling/config/location_krakow.txt]
- --sources_filename=PATH      PATH for catalog
  --show                       View directly the plot
 """
 from docopt import docopt
@@ -28,7 +27,7 @@ from digicamscheduling.io import reader
 from digicamscheduling.core import moon, sun
 from digicamscheduling.core.environement import compute_observability
 from digicamscheduling.utils import time
-from digicamscheduling.display.plot import plot_source_2d, plot_sun_2d, plot_elevation
+from digicamscheduling.display.plot import plot_source_2d, plot_sun_2d
 import matplotlib.pyplot as plt
 from matplotlib.dates import date2num
 import os
@@ -59,7 +58,8 @@ def main(location_filename, start_date, end_date, time_steps, output_path,
     sun_position = sun.compute_sun_position(date=date, location=location)
     sun_elevation = sun_position.alt
 
-    observability = compute_observability(sun_elevation, moon_elevation, moon_phase)
+    observability = compute_observability(sun_elevation, moon_elevation,
+                                          moon_phase)
 
     observability = observability.reshape(-1, len(hours))
     moon_elevation = moon_elevation.reshape(-1, len(hours))

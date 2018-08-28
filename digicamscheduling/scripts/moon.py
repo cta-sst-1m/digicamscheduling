@@ -117,5 +117,3 @@ if __name__ == '__main__':
                             label='Moon')
 
     plt.show()
-
-

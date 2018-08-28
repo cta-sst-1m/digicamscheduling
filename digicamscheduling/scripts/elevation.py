@@ -33,7 +33,9 @@ from astropy.coordinates import EarthLocation
 from astropy.time import Time
 from digicamscheduling.io import reader
 from digicamscheduling.core import gamma_source, moon, sun
-from digicamscheduling.core.environement import interpolate_environmental_limits, is_above_environmental_limits, compute_observability
+from digicamscheduling.core.environement import \
+    interpolate_environmental_limits, is_above_environmental_limits, \
+    compute_observability
 from digicamscheduling.utils import time
 from digicamscheduling.display.plot import plot_elevation, plot_source
 import matplotlib.pyplot as plt
