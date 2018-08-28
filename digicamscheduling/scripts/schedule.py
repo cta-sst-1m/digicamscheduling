@@ -20,6 +20,8 @@ Options:
                               [default: digicamscheduling/config/environmental_limitation.txt]
  --output_path=PATH           PATH to write the schedule
                               [default: .]
+ --use_moon                   Choose to use Moon elevation and phase into
+                              source visibility computation
 """
 from docopt import docopt
 import numpy as np
@@ -39,7 +41,7 @@ import os
 
 
 def main(sources_filename, location_filename, environment_filename,
-         start_date, end_date, time_steps, output_path):
+         start_date, end_date, time_steps, output_path, use_moon):
 
     sources = reader.read_catalog(sources_filename)
     coordinates = reader.read_location(filename=location_filename)
@@ -66,7 +68,7 @@ def main(sources_filename, location_filename, environment_filename,
     sun_elevation = sun_position.alt
 
     observability = compute_observability(sun_elevation, moon_elevation,
-                                          moon_phase)
+                                          moon_phase, use_moon=use_moon)
 
     source_visibility = np.zeros((len(sources), len(date)))
 
@@ -91,7 +93,7 @@ def main(sources_filename, location_filename, environment_filename,
 
     availability, schedule = find_quality_schedule(source_visibility)
     filename = os.path.join(output_path, 'schedule_{}_{}.txt'.format(
-        start_date, end_date))
+        start_date.isot, end_date.isot))
     write_schedule(schedule, sources, date, filename)
 
 
@@ -105,7 +107,8 @@ def entry():
          start_date=args['--start_date'],
          end_date=args['--end_date'],
          time_steps=float(args['--time_step']) * u.minute,
-         output_path=args['--output_path'])
+         output_path=args['--output_path'],
+         use_moon=bool(args['--use_moon']))
 
 
 if __name__ == '__main__':
