@@ -5,9 +5,11 @@ Usage:
   digicamscheduling-elevation [options]
 
 Options:
- -h --help                   Show this screen.
- --start_date=DATE            Starting date (UTC) YYYY-MM-DD HH:MM:SS
- --end_date=DATE              Ending date (UTC) YYYY-MM-DD HH:MM:SS 
+ -h --help                    Show this screen.
+ --start_date=DATE            Starting date (UTC) YYYY-MM-DD HH:MM:SS. If not
+                              specified it will consider current time
+ --end_date=DATE              Ending date (UTC) YYYY-MM-DD HH:MM:SS. If not
+                              specified it will consider current time + 1 day
  --time_step=MINUTES          Time steps in minutes
                               [default: 1]
  --output_path=PATH           Path to save the figure. If not specified the
