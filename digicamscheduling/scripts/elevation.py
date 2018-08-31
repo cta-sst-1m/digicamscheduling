@@ -7,7 +7,6 @@ Usage:
 Options:
  -h --help                   Show this screen.
  --start_date=DATE            Starting date (UTC) YYYY-MM-DD HH:MM:SS
-                              [default: 2018-01-01 00:00:00]
  --end_date=DATE              Ending date (UTC) YYYY-MM-DD HH:MM:SS
                               [default: 2018-01-15 00:00:00]
  --time_step=MINUTES          Time steps in minutes
@@ -27,6 +26,7 @@ Options:
                               [Default: False]
 """
 from docopt import docopt
+from schema import Schema, And, Use
 import numpy as np
 import astropy.units as u
 from astropy.coordinates import EarthLocation
@@ -58,9 +58,6 @@ def main(sources_filename, location_filename, environment_filename,
     az_trees = az_trees * u.deg
     env_limits = interpolate_environmental_limits(alt_trees,
                                                   az_trees)
-
-    start_date = Time(start_date)  # time should be 00:00
-    end_date = Time(end_date)  # time should be 00:00
 
     date = time.compute_time(date_start=start_date, date_end=end_date,
                              time_steps=time_steps, location=location,
@@ -124,6 +121,26 @@ def entry():
 
     args = docopt(__doc__)
 
+    print(args)
+    print(Time.now())
+
+    schema = Schema({'--location_filename': Use(str),
+                     '--sources_filename': Use(str),
+                     '--environment_filename': Use(str),
+                     '--start_date': And(Use(str), Use(Time)),
+                     '--end_date': Use(Time),
+                     '--time_step': And(Use(float), lambda t: t * u.minute),
+                     '--output_path': Use(bool),
+                     '--help': Use(bool),
+                     '--show': Use(bool),
+                     '--threshold': Use(float),
+                     '--use_moon': Use(bool),
+                     }
+                    )
+
+    args = schema.validate(args)
+
+    print(args)
     main(location_filename=args['--location_filename'],
          sources_filename=args['--sources_filename'],
          environment_filename=args['--environment_filename'],
