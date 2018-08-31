@@ -7,8 +7,7 @@ Usage:
 Options:
  -h --help                   Show this screen.
  --start_date=DATE            Starting date (UTC) YYYY-MM-DD HH:MM:SS
- --end_date=DATE              Ending date (UTC) YYYY-MM-DD HH:MM:SS
-                              [default: 2018-01-15 00:00:00]
+ --end_date=DATE              Ending date (UTC) YYYY-MM-DD HH:MM:SS 
  --time_step=MINUTES          Time steps in minutes
                               [default: 1]
  --output_path=PATH           Path to save the figure. If not specified the
@@ -127,10 +126,10 @@ def entry():
     schema = Schema({'--location_filename': Use(str),
                      '--sources_filename': Use(str),
                      '--environment_filename': Use(str),
-                     '--start_date': And(Use(str), Use(Time)),
-                     '--end_date': Use(Time),
+                     '--start_date': Use(lambda s: Time.now() if s is None else Time(s)),
+                     '--end_date': Use(lambda s: Time.now() + 1 * u.day if s is None else Time(s)),
                      '--time_step': And(Use(float), lambda t: t * u.minute),
-                     '--output_path': Use(bool),
+                     '--output_path': Use(lambda s: s if not s else str(s)),
                      '--help': Use(bool),
                      '--show': Use(bool),
                      '--threshold': Use(float),
