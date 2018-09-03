@@ -21,17 +21,16 @@ Options:
  --environment_filename=PATH  PATH for environmental limitations
                               [default: digicamscheduling/config/environmental_limitation.txt]
  --show                       View directly the plot
+                              [Default: True]
  --threshold=N                Threshold for visibility
                               [default: 0.0]
  --use_moon                   Choose to use moon to compute source visibility
                               [Default: False]
 """
 from docopt import docopt
-from schema import Schema, And, Use
 import numpy as np
 import astropy.units as u
 from astropy.coordinates import EarthLocation
-from astropy.time import Time
 from digicamscheduling.io import reader
 from digicamscheduling.core import gamma_source, moon, sun
 from digicamscheduling.core.environement import \
@@ -39,6 +38,7 @@ from digicamscheduling.core.environement import \
     compute_observability
 from digicamscheduling.utils import time
 from digicamscheduling.display.plot import plot_elevation, plot_source
+from digicamscheduling.utils.docopt import convert_commandline_arguments
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import cm
 from tqdm import tqdm
@@ -46,7 +46,7 @@ import os
 
 
 def main(sources_filename, location_filename, environment_filename,
-         start_date, end_date, time_steps, output_path, use_moon, show=False,
+         start_date, end_date, time_step, output_path, use_moon, show=False,
          threshold=0.5):
 
     sources = reader.read_catalog(sources_filename)
@@ -61,7 +61,7 @@ def main(sources_filename, location_filename, environment_filename,
                                                   az_trees)
 
     date = time.compute_time(date_start=start_date, date_end=end_date,
-                             time_steps=time_steps, location=location,
+                             time_step=time_step, location=location,
                              only_night=True)
 
     moon_position = moon.compute_moon_position(date=date, location=location)
@@ -120,38 +120,9 @@ def main(sources_filename, location_filename, environment_filename,
 
 def entry():
 
-    args = docopt(__doc__)
-
-    print(args)
-    print(Time.now())
-
-    schema = Schema({'--location_filename': Use(str),
-                     '--sources_filename': Use(str),
-                     '--environment_filename': Use(str),
-                     '--start_date': Use(lambda s: Time.now() if s is None else Time(s)),
-                     '--end_date': Use(lambda s: Time.now() + 1 * u.day if s is None else Time(s)),
-                     '--time_step': And(Use(float), lambda t: t * u.minute),
-                     '--output_path': Use(lambda s: s if not s else str(s)),
-                     '--help': Use(bool),
-                     '--show': Use(bool),
-                     '--threshold': Use(float),
-                     '--use_moon': Use(bool),
-                     }
-                    )
-
-    args = schema.validate(args)
-
-    print(args)
-    main(location_filename=args['--location_filename'],
-         sources_filename=args['--sources_filename'],
-         environment_filename=args['--environment_filename'],
-         start_date=args['--start_date'],
-         end_date=args['--end_date'],
-         time_steps=float(args['--time_step']) * u.minute,
-         output_path=args['--output_path'],
-         show=args['--show'],
-         threshold=float(args['--threshold']),
-         use_moon=args['--use_moon'])
+    kwargs = docopt(__doc__)
+    kwargs = convert_commandline_arguments(kwargs)
+    main(**kwargs)
 
 
 if __name__ == '__main__':
@@ -172,6 +143,6 @@ if __name__ == '__main__':
          environment_filename=environment_filename,
          start_date=start_date,
          end_date=end_date,
-         time_steps=time_step,
+         time_step=time_step,
          output_path=output_path,
          show=show)

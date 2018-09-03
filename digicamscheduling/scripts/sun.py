@@ -17,7 +17,7 @@ if __name__ == '__main__':
     start_date = Time('2017-08-31 20:00')
     end_date = Time('2018-08-31 20:00')
     time_steps = 15 * u.min
-    date = time.compute_time(date_start=start_date, date_end=end_date, time_steps=time_steps, location=location, only_night=False)
+    date = time.compute_time(date_start=start_date, date_end=end_date, time_step=time_steps, location=location, only_night=False)
     sun_position = sun.compute_sun_position(date=date, location=location)
 
     fig_1 = plt.figure()

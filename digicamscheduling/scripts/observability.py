@@ -45,7 +45,7 @@ def main(location_filename, start_date, end_date, time_steps, output_path,
     hours = hours.to(u.hour)
 
     date = time.compute_time(date_start=start_date, date_end=end_date,
-                             time_steps=time_steps, only_night=False)
+                             time_step=time_steps, only_night=False)
 
     days = date.reshape(-1, len(hours))
     days = days.datetime

@@ -58,7 +58,7 @@ def main(sources_filename, location_filename, environment_filename,
     end_date = Time(end_date)  # time should be 00:00
 
     date = time.compute_time(date_start=start_date, date_end=end_date,
-                             time_steps=time_steps, location=location,
+                             time_step=time_steps, location=location,
                              only_night=True)
 
     moon_position = moon.compute_moon_position(date=date, location=location)

@@ -36,7 +36,7 @@ def main(location_filename, start_date, end_date, time_steps, output_path,
     coordinates_krakow = reader.read_location(filename=location_filename)
     location = EarthLocation(**coordinates_krakow)
     date = time.compute_time(date_start=start_date, date_end=end_date,
-                             time_steps=time_steps, location=location,
+                             time_step=time_steps, location=location,
                              only_night=True)
     moon_position = moon.compute_moon_position(date=date, location=location)
     moon_phase = moon.compute_moon_phase(date=date)
@@ -93,7 +93,7 @@ if __name__ == '__main__':
     end_date = Time('2018-07-28 12:00')
     time_steps = 1 * u.min
     date = time.compute_time(date_start=start_date, date_end=end_date,
-                             time_steps=time_steps, location=location,
+                             time_step=time_steps, location=location,
                              only_night=True)
     moon_position = moon.compute_moon_position(date=date, location=location)
     moon_phase = moon.compute_moon_phase(date=date)
