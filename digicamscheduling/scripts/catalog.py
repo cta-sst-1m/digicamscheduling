@@ -5,21 +5,23 @@ Usage:
   digicamscheduling-catalog [options]
 
 Options:
- -h --help                   Show this screen.
- --start_date=DATE            Starting date (UTC) YYYY-MM-DD-HH:MM:SS
-                              [default: 2018-01-01 00:00:00]
- --end_date=DATE              Ending date (UTC) YYYY-MM-DD-HH:MM:SS
-                              [default: 2018-12-31 00:00:00]
- --time_step=MINUTES          Time steps in minutes
-                              [default: 60]
- --output_path=PATH           Path to save the figure
-                              [default: .]
- --location_filename=PATH     PATH for location config file
-                              [default: digicamscheduling/config/location_krakow.txt]
- --sources_filename=PATH      PATH for catalog
-                              [default: digicamscheduling/config/catalog.json]
- --environment_filename=PATH  PATH for environmental limitations
-                              [default: digicamscheduling/config/environmental_limitation.txt]
+    --help                       Show this screen.
+    --start_date=DATE            Starting date (UTC) YYYY-MM-DD-HH:MM:SS
+                                 [default: 2018-01-01 12:00]
+    --end_date=DATE              Ending date (UTC) YYYY-MM-DD-HH:MM:SS
+                                 [default: 2019-01-01 12:00]
+    --time_step=MINUTES          Time steps in minutes
+                                 [default: 60]
+    --output_path=PATH           Path to save the figure
+                                 [default: .]
+    --location_filename=PATH     PATH for location config file
+                                 [default: digicamscheduling/config/location_krakow.txt]
+    --sources_filename=PATH      PATH for catalog
+                                 [default: digicamscheduling/config/catalog.json]
+    --environment_filename=PATH  PATH for environmental limitations
+                                 [default: digicamscheduling/config/environmental_limitation.txt]
+    --show                       To show the plots
+                                 [default: True]
 """
 from docopt import docopt
 import numpy as np
@@ -31,6 +33,7 @@ from digicamscheduling.core import gamma_source, moon, sun, environement
 from digicamscheduling.core.environement import \
     interpolate_environmental_limits, compute_observability
 from digicamscheduling.utils import time
+from digicamscheduling.utils.docopt import convert_commandline_arguments
 from digicamscheduling.display.plot import plot_source_2d
 import matplotlib.pyplot as plt
 from tqdm import tqdm
@@ -39,7 +42,7 @@ import os
 
 
 def main(sources_filename, location_filename, environment_filename,
-         start_date, end_date, time_steps, output_path):
+         start_date, end_date, time_step, output_path, show):
 
     sources = reader.read_catalog(sources_filename)
     coordinates = reader.read_location(filename=location_filename)
@@ -52,11 +55,11 @@ def main(sources_filename, location_filename, environment_filename,
     env_limits = interpolate_environmental_limits(alt_trees, az_trees)
     start_date = Time(start_date)  # time should be 00:00
     end_date = Time(end_date)  # time should be 00:00
-    hours = np.arange(0, 1, time_steps.to(u.day).value) * u.day
+    hours = np.arange(0, 1, time_step.to(u.day).value) * u.day
     hours = hours.to(u.hour)
 
     date = time.compute_time(date_start=start_date, date_end=end_date,
-                             time_step=time_steps, only_night=False)
+                             time_step=time_step, only_night=False)
 
     days = date.reshape(-1, len(hours))
     days = days.datetime
@@ -108,18 +111,17 @@ def main(sources_filename, location_filename, environment_filename,
         fig_1.savefig(filename + '_elevation.png')
         fig_2.savefig(filename + '_visibility.png')
 
+    if show:
+
+        plt.show()
+
 
 def entry():
 
-    args = docopt(__doc__)
+    kwargs = docopt(__doc__)
+    kwargs = convert_commandline_arguments(kwargs)
 
-    main(location_filename=args['--location_filename'],
-         sources_filename=args['--sources_filename'],
-         environment_filename=args['--environment_filename'],
-         start_date=args['--start_date'],
-         end_date=args['--end_date'],
-         time_steps=float(args['--time_step']) * u.minute,
-         output_path=args['--output_path'],)
+    main(**kwargs)
 
 
 if __name__ == '__main__':
@@ -139,5 +141,5 @@ if __name__ == '__main__':
          environment_filename=environment_filename,
          start_date=start_date,
          end_date=end_date,
-         time_steps=time_step,
-         output_path=output_path,)
+         time_step=time_step,
+         output_path=output_path, )
