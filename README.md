@@ -14,6 +14,7 @@ Numpy, Scipy, Astropy, PyAstronomy, Matplolib, Pandas, Tqdm, Cython, Docopt
 
 ```
 git clone https://github.com/cta-sst-1m/digicamscheduling
+git submodule update --init --recursive # this will download the config files that are used by default
 cd digicamscheduling
 conda env create -f environment.yml
 source activate digicamscheduling
@@ -34,8 +35,8 @@ digicamscheduling-schedule
 Example of usage
 
 ```
-digicamscheduling-elevation --start_date='2018-08-15 12:00' --end_date='2018-08-16 12:00' --time_step=1 --show
-digicamscheduling-schedule --start_date='2018-08-15 12:00' --end_date='2018-08-16 12:00' --time_step=30 --show
+digicamscheduling-elevation --start_date='2018-08-15 12:00' --end_date='2018-08-16 12:00' --time_step=1
+digicamscheduling-schedule --start_date='2018-08-15 12:00' --end_date='2018-08-16 12:00' --time_step=30 --output_path='.'
 ```
 
 Use the option `--help` to see how to run the scripts
@@ -71,7 +72,3 @@ Most of the issues appear when:
 ![](docs/figures/1ES%201959+650_visibility.png)
 ![](docs/figures/elevation.png) 
 ![](docs/figures/visibility.png)
-
-
-
-
