@@ -15,11 +15,8 @@ Options:
     --output_path=PATH           Path to save the figure
                                  [default: .]
     --location_filename=PATH     PATH for location config file
-                                 [default: digicamscheduling/config/location_krakow.txt]
     --sources_filename=PATH      PATH for catalog
-                                 [default: digicamscheduling/config/catalog.json]
     --environment_filename=PATH  PATH for environmental limitations
-                                 [default: digicamscheduling/config/environmental_limitation.txt]
     --hide                       Hide the plots
 """
 from docopt import docopt
@@ -72,7 +69,7 @@ def main(sources_filename, location_filename, environment_filename,
     sun_elevation = sun_position.alt
 
     observability = compute_observability(sun_elevation, moon_elevation,
-                                          moon_phase)
+                                          moon_phase, use_moon=True)
 
     for i, source in tqdm(enumerate(sources), total=len(sources),
                           desc='Source'):
@@ -119,4 +116,6 @@ def entry():
 
     kwargs = docopt(__doc__)
     kwargs = convert_commandline_arguments(kwargs)
+
+    print(kwargs)
     main(**kwargs)

@@ -11,11 +11,8 @@ Options:
  --time_step=MINUTES          Time steps in minutes
                               [default: 30]
  --location_filename=PATH     PATH for location config file
-                              [default: digicamscheduling/config/location_krakow.txt]
  --sources_filename=PATH      PATH for catalog
-                              [default: digicamscheduling/config/catalog.json]
  --environment_filename=PATH  PATH for environmental limitations
-                              [default: digicamscheduling/config/environmental_limitation.txt]
  --output_path=PATH           PATH to write the schedule
                               [default: .]
  --use_moon                   Choose to use Moon elevation and phase into
