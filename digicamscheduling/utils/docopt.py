@@ -2,13 +2,13 @@ from schema import Schema, And, Use, Optional
 from astropy.time import Time
 import astropy.units as u
 
+
 def convert_commandline_arguments(args):
 
     new_args = {}
 
     for key, val in args.items():
         new_args[key.replace('--', '')] = val
-
 
     schema = {'location_filename': Use(str),
               Optional('sources_filename'): Use(str),
@@ -30,8 +30,5 @@ def convert_commandline_arguments(args):
     args = schema.validate(new_args)
 
     del args['help']
-
-    print(args)
-
 
     return args
