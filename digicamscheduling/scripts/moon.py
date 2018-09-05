@@ -14,7 +14,7 @@ Options:
                               figures will not be saved
  --location_filename=PATH     PATH for location config file
                               [default: digicamscheduling/config/location_krakow.txt]
- --show=BOOL                  View directly the plot
+ --show                       View directly the plot
                               [default: 1]
 """
 import os
