@@ -17,7 +17,9 @@ if __name__ == '__main__':
     start_date = Time('2017-08-31 20:00')
     end_date = Time('2018-08-31 20:00')
     time_steps = 15 * u.min
-    date = time.compute_time(date_start=start_date, date_end=end_date, time_step=time_steps, location=location, only_night=False)
+    date = time.compute_time(date_start=start_date, date_end=end_date,
+                             time_step=time_steps, location=location,
+                             only_night=False)
     sun_position = sun.compute_sun_position(date=date, location=location)
 
     fig_1 = plt.figure()
@@ -29,8 +31,7 @@ if __name__ == '__main__':
 
     display.plot_azimuth(date, sun_position.az, axis=axis_1, label='Sun')
     display.plot_elevation(date, sun_position.alt, axis=axis_2, label='Sun')
-    display.plot_trajectory(sun_position.az, sun_position.alt, axes=axis_3, label='Sun')
+    display.plot_trajectory(sun_position.az, sun_position.alt, axes=axis_3,
+                            label='Sun')
 
     plt.show()
-
-
