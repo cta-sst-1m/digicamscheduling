@@ -1,15 +1,20 @@
 import astropy.units as u
 import pandas as pd
 import numpy as np
+import json
 
 
 def read_catalog(filename):
-    sources = []
 
-    with open(filename) as file:
-        for line in file:
-            line = line.split('  ')
-            sources.append({'name': line[0], 'ra': float(line[1]) * u.deg, 'dec': float(line[2]) * u.deg, 'weight': float(line[3].rstrip())})
+    with open(filename, 'r') as file:
+
+        sources = json.load(file)['sources']
+
+    for source in sources:
+
+        source['ra'] = source['ra'] * u.deg
+        source['dec'] = source['dec'] * u.deg
+        source['weight'] = float(source['weight'])
 
     return sources
 
@@ -29,7 +34,8 @@ def read_location(filename):
 
 
 def read_ohp_weather_data(filename):
-    df = pd.read_table(filename, header=1, skip_blank_lines=True, sep=',', converters={'Date': pd.to_datetime})
+    df = pd.read_table(filename, header=1, skip_blank_lines=True, sep=',',
+                       converters={'Date': pd.to_datetime})
     names = df.columns.values.tolist()
     for i, name in enumerate(names):
         if name[0] == ' ':
@@ -55,8 +61,7 @@ def read_environmental_limits(filename):
 
 if __name__ == '__main__':
 
-    sources = read_catalog('../config/catalog.txt')
+    sources_2 = read_catalog('../config/catalog.json')
 
-    # print(sources)
-
-    read_ohp_weather_data('/data/datasets/CTA/weather_ohp/pluie_01012008_au_01012009.txt')
+    read_ohp_weather_data('/data/datasets/CTA/weather_ohp/'
+                          'pluie_01012008_au_01012009.txt')

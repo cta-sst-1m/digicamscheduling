@@ -6,9 +6,9 @@ Usage:
 
 Options:
  -h --help                   Show this screen.
- --start_date=DATE            Starting date YYYY-MM-DD-HH:MM:SS
+ --start_date=DATE            Starting date (UTC) YYYY-MM-DD-HH:MM:SS
                               [default: 2018-01-01 00:00:00]
- --end_date=DATE              Ending date YYYY-MM-DD-HH:MM:SS
+ --end_date=DATE              Ending date (UTC) YYYY-MM-DD-HH:MM:SS
                               [default: 2018-12-31 00:00:00]
  --time_step=MINUTES          Time steps in minutes
                               [default: 60]
@@ -17,7 +17,7 @@ Options:
  --location_filename=PATH     PATH for location config file
                               [default: digicamscheduling/config/location_krakow.txt]
  --sources_filename=PATH      PATH for catalog
-                              [default: digicamscheduling/config/catalog.txt]
+                              [default: digicamscheduling/config/catalog.json]
  --environment_filename=PATH  PATH for environmental limitations
                               [default: digicamscheduling/config/environmental_limitation.txt]
 """
@@ -28,7 +28,8 @@ from astropy.coordinates import EarthLocation
 from astropy.time import Time
 from digicamscheduling.io import reader
 from digicamscheduling.core import gamma_source, moon, sun, environement
-from digicamscheduling.core.environement import interpolate_environmental_limits, compute_observability
+from digicamscheduling.core.environement import \
+    interpolate_environmental_limits, compute_observability
 from digicamscheduling.utils import time
 from digicamscheduling.display.plot import plot_source_2d
 import matplotlib.pyplot as plt
@@ -87,7 +88,6 @@ def main(sources_filename, location_filename, environment_filename,
         source_visibility *= observability * (moon_separation > 10 * u.deg)
 
         source_elevation = source_elevation.reshape(-1, len(hours))
-        moon_separation = moon_separation.reshape(-1, len(hours))
         source_visibility = source_visibility.reshape(-1, len(hours))
 
         fig_1 = plt.figure()
@@ -130,8 +130,9 @@ if __name__ == '__main__':
     output_path = 'figures/'
 
     location_filename = 'digicamscheduling/config/location_krakow.txt'
-    sources_filename = 'digicamscheduling/config/catalog.txt'
-    environment_filename = 'digicamscheduling/config/environmental_limitation.txt'
+    sources_filename = 'digicamscheduling/config/catalog.json'
+    environment_filename = 'digicamscheduling/config/' \
+                           'environmental_limitation.txt'
 
     main(location_filename=location_filename,
          sources_filename=sources_filename,
