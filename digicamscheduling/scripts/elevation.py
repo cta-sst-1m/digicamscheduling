@@ -15,11 +15,8 @@ Options:
  --output_path=PATH           Path to save the figure. If not specified the
                               figures will not be saved
  --location_filename=PATH     PATH for location config file
-                              [Default: digicamscheduling/config/location_krakow.txt]
  --sources_filename=PATH      PATH for catalog
-                              [Default: digicamscheduling/config/catalog.json]
  --environment_filename=PATH  PATH for environmental limitations
-                              [Default: digicamscheduling/config/environmental_limitation.txt]
  --hide                       Hide the plot
  --threshold=N                Threshold for visibility
                               [Default: 0.0]

@@ -13,7 +13,6 @@ Options:
     --output_path=PATH           Path to save the figure. If not specified the
                                  figures will not be saved
     --location_filename=PATH     PATH for location config file
-                                 [default: digicamscheduling/config/location_krakow.txt]
     --hide                       Hide the plot
 """
 

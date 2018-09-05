@@ -28,10 +28,11 @@ def compute_observability(sun_elevation, moon_alt, moon_ph, use_moon=True):
 
     moon_elevation = moon_alt.copy()
     moon_phase = moon_ph.copy()
+    observability = np.ones(sun_elevation.shape)
 
     moon_phase[(moon_elevation < 0 * u.deg)] = 0.
     moon_elevation[(moon_elevation < 0 * u.deg)] = 0 * u.deg
-    observability = (sun_elevation < -12 * u.deg)
+    observability[(sun_elevation > -12 * u.deg)] = 0
 
     if use_moon:
 

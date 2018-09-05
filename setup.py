@@ -4,7 +4,8 @@ command_line_applications = {'console_scripts': [
     'digicamscheduling-catalog=digicamscheduling.scripts.catalog:entry',
     'digicamscheduling-elevation=digicamscheduling.scripts.elevation:entry',
     'digicamscheduling-moon=digicamscheduling.scripts.moon:entry',
-    'digicamscheduling-observability=digicamscheduling.scripts.observability:entry',
+    'digicamscheduling-observability=digicamscheduling.scripts.'
+    'observability:entry',
     'digicamscheduling-sun=digicamscheduling.scripts.sun:entry',
     'digicamscheduling-schedule=digicamscheduling.scripts.schedule:entry',
 
@@ -20,7 +21,8 @@ setup(
     author='Cyril Alispach',
     author_email='cyril.alispach@gmail.com',
     long_description=open('README.md').read(),
-    package_data={'': ['config/*']},
+    include_package_data=True,
+    package_data={'': ['config/digicamextra/*']},
     description='A package for observation scheduling in gamma-ray astronomy',
     requires=['numpy', 'astropy', 'pyastronomy', 'matplotlib', 'scipy',
               'docopt'],

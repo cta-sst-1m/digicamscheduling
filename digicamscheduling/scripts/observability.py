@@ -14,7 +14,6 @@ Options:
                               [default: 60]
  --output_path=PATH           Path to save the figure
  --location_filename=PATH     PATH for location config file
-                              [default: digicamscheduling/config/location_krakow.txt]
  --hide                       Hide the plot
 """
 from docopt import docopt
