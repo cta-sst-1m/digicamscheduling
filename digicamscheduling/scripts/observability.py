@@ -13,10 +13,9 @@ Options:
  --time_step=MINUTES          Time steps in minutes
                               [default: 60]
  --output_path=PATH           Path to save the figure
-                              [default: .]
  --location_filename=PATH     PATH for location config file
                               [default: digicamscheduling/config/location_krakow.txt]
- --show                       View directly the plot
+ --hide                       Hide the plot
 """
 from docopt import docopt
 import numpy as np
@@ -28,24 +27,25 @@ from digicamscheduling.core import moon, sun
 from digicamscheduling.core.environement import compute_observability
 from digicamscheduling.utils import time
 from digicamscheduling.display.plot import plot_source_2d, plot_sun_2d
+from digicamscheduling.utils.docopt import convert_commandline_arguments
 import matplotlib.pyplot as plt
 from matplotlib.dates import date2num
 import os
 
 
-def main(location_filename, start_date, end_date, time_steps, output_path,
-         show=False):
+def main(location_filename, start_date, end_date, time_step, output_path,
+         hide=False):
 
     coordinates = reader.read_location(filename=location_filename)
     location = EarthLocation(**coordinates)
 
     start_date = Time(start_date)  # time should be 00:00
     end_date = Time(end_date)  # time should be 00:00
-    hours = np.arange(0, 1, time_steps.to(u.day).value) * u.day
+    hours = np.arange(0, 1, time_step.to(u.day).value) * u.day
     hours = hours.to(u.hour)
 
     date = time.compute_time(date_start=start_date, date_end=end_date,
-                             time_steps=time_steps, only_night=False)
+                             time_step=time_step, only_night=False)
 
     days = date.reshape(-1, len(hours))
     days = days.datetime
@@ -87,42 +87,20 @@ def main(location_filename, start_date, end_date, time_steps, output_path,
                    c_label='Moon phase []', vmin=0, vmax=1,
                    cmap=plt.get_cmap('RdYlGn_r'), axes=axes_4)
 
-    fig_1.savefig(os.path.join(output_path, 'sun_elevation.png'))
-    fig_2.savefig(os.path.join(output_path, 'observability.png'))
-    fig_3.savefig(os.path.join(output_path, 'moon_elevation.png'))
-    fig_4.savefig(os.path.join(output_path, 'moon_phase.png'))
+    if output_path is not None:
 
-    if show:
+        fig_1.savefig(os.path.join(output_path, 'sun_elevation.png'))
+        fig_2.savefig(os.path.join(output_path, 'observability.png'))
+        fig_3.savefig(os.path.join(output_path, 'moon_elevation.png'))
+        fig_4.savefig(os.path.join(output_path, 'moon_phase.png'))
+
+    if not hide:
 
         plt.show()
 
 
 def entry():
 
-    args = docopt(__doc__)
-
-    print(args)
-
-    main(location_filename=args['--location_filename'],
-         start_date=args['--start_date'],
-         end_date=args['--end_date'],
-         time_steps=float(args['--time_step']) * u.minute,
-         output_path=args['--output_path'],
-         show=args['--show'])
-
-
-if __name__ == '__main__':
-    start_date = '2018-08-01'
-    end_date = '2018-08-31'
-    time_step = 15 * u.minute
-    output_path = 'figures/'
-    show = True
-
-    location_filename = 'digicamscheduling/config/location_krakow.txt'
-
-    main(location_filename=location_filename,
-         start_date=start_date,
-         end_date=end_date,
-         time_steps=time_step,
-         output_path=output_path,
-         show=show,)
+    kwargs = docopt(__doc__)
+    kwargs = convert_commandline_arguments(kwargs)
+    main(**kwargs)

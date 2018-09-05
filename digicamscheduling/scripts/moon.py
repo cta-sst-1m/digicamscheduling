@@ -5,19 +5,18 @@ Usage:
   digicamscheduling-moon [options]
 
 Options:
- -h --help                   Show this screen.
- --start_date=DATE            Starting date (UTC) YYYY-MM-DD HH:MM:SS
-                              [default: 2018-01-01 00:00:00]
- --end_date=DATE              Ending date (UTC) YYYY-MM-DD HH:MM:SS
-                              [default: 2018-01-15 00:00:00]
- --time_step=MINUTES          Time steps in minutes
-                              [default: 5]
- --output_path=PATH           Path to save the figure. If not specified the
-                              figures will not be saved
- --location_filename=PATH     PATH for location config file
-                              [default: digicamscheduling/config/location_krakow.txt]
- --show                       View directly the plot
+    -h --help                    Show this screen.
+    --start_date=DATE            Starting date (UTC) YYYY-MM-DD HH:MM:SS
+    --end_date=DATE              Ending date (UTC) YYYY-MM-DD HH:MM:SS
+    --time_step=MINUTES          Time steps in minutes
+                                 [default: 5]
+    --output_path=PATH           Path to save the figure. If not specified the
+                                 figures will not be saved
+    --location_filename=PATH     PATH for location config file
+                                 [default: digicamscheduling/config/location_krakow.txt]
+    --hide                       Hide the plot
 """
+
 import os
 from docopt import docopt
 import astropy.units as u
@@ -27,16 +26,18 @@ from digicamscheduling.core import moon
 from digicamscheduling.io import reader
 import digicamscheduling.display.plot as display
 import matplotlib.pyplot as plt
+
 from digicamscheduling.utils import time
+from digicamscheduling.utils.docopt import convert_commandline_arguments
 
 
-def main(location_filename, start_date, end_date, time_steps, output_path,
-         show=False):
+def main(location_filename, start_date, end_date, time_step, output_path,
+         hide=False):
 
     coordinates_krakow = reader.read_location(filename=location_filename)
     location = EarthLocation(**coordinates_krakow)
     date = time.compute_time(date_start=start_date, date_end=end_date,
-                             time_steps=time_steps, location=location,
+                             time_step=time_step, location=location,
                              only_night=True)
     moon_position = moon.compute_moon_position(date=date, location=location)
     moon_phase = moon.compute_moon_phase(date=date)
@@ -59,7 +60,7 @@ def main(location_filename, start_date, end_date, time_steps, output_path,
     display.plot_moon_phase(date=date, phase=moon_phase, axes=axis_4,
                             label='Moon')
 
-    if show:
+    if not hide:
 
         plt.show()
 
@@ -73,14 +74,10 @@ def main(location_filename, start_date, end_date, time_steps, output_path,
 
 def entry():
 
-    args = docopt(__doc__)
+    kwargs = docopt(__doc__)
+    kwargs = convert_commandline_arguments(kwargs)
 
-    main(location_filename=args['--location_filename'],
-         start_date=Time(args['--start_date']),
-         end_date=Time(args['--end_date']),
-         time_steps=float(args['--time_step']) * u.minute,
-         output_path=args['--output_path'],
-         show=args['--show'])
+    main(**kwargs)
 
 
 if __name__ == '__main__':
@@ -93,7 +90,7 @@ if __name__ == '__main__':
     end_date = Time('2018-07-28 12:00')
     time_steps = 1 * u.min
     date = time.compute_time(date_start=start_date, date_end=end_date,
-                             time_steps=time_steps, location=location,
+                             time_step=time_steps, location=location,
                              only_night=True)
     moon_position = moon.compute_moon_position(date=date, location=location)
     moon_phase = moon.compute_moon_phase(date=date)
