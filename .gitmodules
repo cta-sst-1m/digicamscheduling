@@ -1,3 +1,3 @@
-[submodule "config"]
+[submodule "digicamscheduling/config"]
 	path = digicamscheduling/config
-	url = https://github.com/cta-sst-1m/digicam-extra
+	url = https://github.com/cta-sst-1m/digicam-extra.git

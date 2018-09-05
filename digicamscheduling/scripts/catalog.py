@@ -117,4 +117,5 @@ def entry():
     kwargs = docopt(__doc__)
     kwargs = convert_commandline_arguments(kwargs)
 
+    print(kwargs)
     main(**kwargs)
