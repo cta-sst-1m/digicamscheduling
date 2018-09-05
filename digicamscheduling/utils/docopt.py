@@ -21,7 +21,7 @@ def convert_commandline_arguments(args):
               'time_step': And(Use(float), Use(lambda t: t * u.minute)),
               'output_path': Use(lambda s: s if not s else str(s)),
               'help': Use(bool),
-              Optional('show'): Use(bool),
+              Optional('hide'): Use(bool),
               Optional('threshold'): Use(float),
               Optional('use_moon'): Use(bool),
               }

@@ -20,8 +20,7 @@ Options:
                                  [default: digicamscheduling/config/catalog.json]
     --environment_filename=PATH  PATH for environmental limitations
                                  [default: digicamscheduling/config/environmental_limitation.txt]
-    --show                       To show the plots
-                                 [default: True]
+    --hide                       Hide the plots
 """
 from docopt import docopt
 import numpy as np
@@ -42,7 +41,7 @@ import os
 
 
 def main(sources_filename, location_filename, environment_filename,
-         start_date, end_date, time_step, output_path, show):
+         start_date, end_date, time_step, output_path, hide=False):
 
     sources = reader.read_catalog(sources_filename)
     coordinates = reader.read_location(filename=location_filename)
@@ -111,7 +110,7 @@ def main(sources_filename, location_filename, environment_filename,
         fig_1.savefig(filename + '_elevation.png')
         fig_2.savefig(filename + '_visibility.png')
 
-    if show:
+    if not hide:
 
         plt.show()
 
@@ -120,26 +119,4 @@ def entry():
 
     kwargs = docopt(__doc__)
     kwargs = convert_commandline_arguments(kwargs)
-
     main(**kwargs)
-
-
-if __name__ == '__main__':
-
-    start_date = '2018-01-01'
-    end_date = '2018-12-31'
-    time_step = 60 * u.minute
-    output_path = 'figures/'
-
-    location_filename = 'digicamscheduling/config/location_krakow.txt'
-    sources_filename = 'digicamscheduling/config/catalog.json'
-    environment_filename = 'digicamscheduling/config/' \
-                           'environmental_limitation.txt'
-
-    main(location_filename=location_filename,
-         sources_filename=sources_filename,
-         environment_filename=environment_filename,
-         start_date=start_date,
-         end_date=end_date,
-         time_step=time_step,
-         output_path=output_path, )

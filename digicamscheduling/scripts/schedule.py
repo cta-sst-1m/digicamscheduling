@@ -7,9 +7,7 @@ Usage:
 Options:
  -h --help                    Show this screen.
  --start_date=DATE            Starting date (UTC) YYYY-MM-DD HH:MM:SS
-                              [default: 2018-01-01 00:00:00]
  --end_date=DATE              Ending date (UTC) YYYY-MM-DD HH:MM:SS
-                              [default: 2018-01-15 00:00:00]
  --time_step=MINUTES          Time steps in minutes
                               [default: 30]
  --location_filename=PATH     PATH for location config file
@@ -37,11 +35,12 @@ from digicamscheduling.utils import time
 from digicamscheduling.core.scheduler import find_quality_schedule
 from tqdm import tqdm
 from digicamscheduling.io.writer import write_schedule
+from digicamscheduling.utils.docopt import convert_commandline_arguments
 import os
 
 
 def main(sources_filename, location_filename, environment_filename,
-         start_date, end_date, time_steps, output_path, use_moon):
+         start_date, end_date, time_step, output_path, use_moon):
 
     sources = reader.read_catalog(sources_filename)
     coordinates = reader.read_location(filename=location_filename)
@@ -58,7 +57,7 @@ def main(sources_filename, location_filename, environment_filename,
     end_date = Time(end_date)  # time should be 00:00
 
     date = time.compute_time(date_start=start_date, date_end=end_date,
-                             time_step=time_steps, location=location,
+                             time_step=time_step, location=location,
                              only_night=True)
 
     moon_position = moon.compute_moon_position(date=date, location=location)
@@ -99,34 +98,7 @@ def main(sources_filename, location_filename, environment_filename,
 
 def entry():
 
-    args = docopt(__doc__)
+    kwargs = docopt(__doc__)
+    kwargs = convert_commandline_arguments(kwargs)
 
-    main(location_filename=args['--location_filename'],
-         sources_filename=args['--sources_filename'],
-         environment_filename=args['--environment_filename'],
-         start_date=args['--start_date'],
-         end_date=args['--end_date'],
-         time_steps=float(args['--time_step']) * u.minute,
-         output_path=args['--output_path'],
-         use_moon=bool(args['--use_moon']))
-
-
-if __name__ == '__main__':
-
-    start_date = '2018-06-26'
-    end_date = '2018-07-10'
-    time_step = 1 * u.minute
-
-    output_path = '.'
-    location_filename = 'digicamscheduling/config/location_krakow.txt'
-    sources_filename = 'digicamscheduling/config/catalog.json'
-    environment_filename = 'digicamscheduling/config/' \
-                           'environmental_limitation.txt'
-
-    main(location_filename=location_filename,
-         sources_filename=sources_filename,
-         environment_filename=environment_filename,
-         start_date=start_date,
-         end_date=end_date,
-         time_steps=time_step,
-         output_path=output_path)
+    main(**kwargs)

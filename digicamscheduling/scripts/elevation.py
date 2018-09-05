@@ -20,8 +20,7 @@ Options:
                               [Default: digicamscheduling/config/catalog.json]
  --environment_filename=PATH  PATH for environmental limitations
                               [Default: digicamscheduling/config/environmental_limitation.txt]
- --show                       View directly the plot
-                              [Default: True]
+ --hide                       Hide the plot
  --threshold=N                Threshold for visibility
                               [Default: 0.0]
  --use_moon                   Choose to use moon to compute source visibility
@@ -46,7 +45,7 @@ import os
 
 
 def main(sources_filename, location_filename, environment_filename,
-         start_date, end_date, time_step, output_path, use_moon, show=False,
+         start_date, end_date, time_step, output_path, use_moon, hide=False,
          threshold=0.5):
 
     sources = reader.read_catalog(sources_filename)
@@ -113,7 +112,7 @@ def main(sources_filename, location_filename, environment_filename,
         fig_1.savefig(os.path.join(output_path, 'elevation.png'))
         fig_2.savefig(os.path.join(output_path, 'visibility.png'))
 
-    if show:
+    if not hide:
 
         plt.show()
 
@@ -123,26 +122,3 @@ def entry():
     kwargs = docopt(__doc__)
     kwargs = convert_commandline_arguments(kwargs)
     main(**kwargs)
-
-
-if __name__ == '__main__':
-
-    start_date = '2018-06-26'
-    end_date = '2018-07-10'
-    time_step = 1 * u.minute
-    output_path = 'figures/'
-    show = False
-
-    location_filename = 'digicamscheduling/config/location_krakow.txt'
-    sources_filename = 'digicamscheduling/config/catalog.json'
-    environment_filename = 'digicamscheduling/config/' \
-                           'environmental_limitation.txt'
-
-    main(location_filename=location_filename,
-         sources_filename=sources_filename,
-         environment_filename=environment_filename,
-         start_date=start_date,
-         end_date=end_date,
-         time_step=time_step,
-         output_path=output_path,
-         show=show)

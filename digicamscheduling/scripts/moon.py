@@ -5,18 +5,18 @@ Usage:
   digicamscheduling-moon [options]
 
 Options:
- -h --help                   Show this screen.
- --start_date=DATE            Starting date (UTC) YYYY-MM-DD HH:MM:SS
- --end_date=DATE              Ending date (UTC) YYYY-MM-DD HH:MM:SS
- --time_step=MINUTES          Time steps in minutes
-                              [default: 5]
- --output_path=PATH           Path to save the figure. If not specified the
-                              figures will not be saved
- --location_filename=PATH     PATH for location config file
-                              [default: digicamscheduling/config/location_krakow.txt]
- --show                       View directly the plot
-                              [default: 1]
+    -h --help                    Show this screen.
+    --start_date=DATE            Starting date (UTC) YYYY-MM-DD HH:MM:SS
+    --end_date=DATE              Ending date (UTC) YYYY-MM-DD HH:MM:SS
+    --time_step=MINUTES          Time steps in minutes
+                                 [default: 5]
+    --output_path=PATH           Path to save the figure. If not specified the
+                                 figures will not be saved
+    --location_filename=PATH     PATH for location config file
+                                 [default: digicamscheduling/config/location_krakow.txt]
+    --hide                       Hide the plot
 """
+
 import os
 from docopt import docopt
 import astropy.units as u
@@ -30,8 +30,9 @@ import matplotlib.pyplot as plt
 from digicamscheduling.utils import time
 from digicamscheduling.utils.docopt import convert_commandline_arguments
 
+
 def main(location_filename, start_date, end_date, time_step, output_path,
-         show=False):
+         hide=False):
 
     coordinates_krakow = reader.read_location(filename=location_filename)
     location = EarthLocation(**coordinates_krakow)
@@ -59,7 +60,7 @@ def main(location_filename, start_date, end_date, time_step, output_path,
     display.plot_moon_phase(date=date, phase=moon_phase, axes=axis_4,
                             label='Moon')
 
-    if show:
+    if not hide:
 
         plt.show()
 
@@ -74,8 +75,6 @@ def main(location_filename, start_date, end_date, time_step, output_path,
 def entry():
 
     kwargs = docopt(__doc__)
-    print(kwargs)
-
     kwargs = convert_commandline_arguments(kwargs)
 
     main(**kwargs)
