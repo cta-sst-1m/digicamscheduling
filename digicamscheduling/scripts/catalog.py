@@ -6,14 +6,15 @@ Usage:
 
 Options:
     --help                       Show this screen.
-    --start_date=DATE            Starting date (UTC) YYYY-MM-DD-HH:MM:SS
-                                 [default: 2018-01-01 12:00]
-    --end_date=DATE              Ending date (UTC) YYYY-MM-DD-HH:MM:SS
-                                 [default: 2019-01-01 12:00]
+    --start_date=DATE            Starting date (UTC) YYYY-MM-DD
+                                 (Should start at midnight !)
+                                 [default: 2018-01-01 00:00]
+    --end_date=DATE              Ending date (UTC) YYYY-MM-DD
+                                 (Should end at midnight !)
+                                 [default: 2019-01-01 00:00]
     --time_step=MINUTES          Time steps in minutes
                                  [default: 60]
     --output_path=PATH           Path to save the figure
-                                 [default: .]
     --location_filename=PATH     PATH for location config file
     --sources_filename=PATH      PATH for catalog
     --environment_filename=PATH  PATH for environmental limitations
@@ -102,10 +103,12 @@ def main(sources_filename, location_filename, environment_filename,
                        extent=extent, vmin=0, vmax=1, axes=axes_2,
                        c_label='visibility []')
 
-        filename = os.path.join(output_path, source['name'])
+        if output_path is not None:
 
-        fig_1.savefig(filename + '_elevation.png')
-        fig_2.savefig(filename + '_visibility.png')
+            filename = os.path.join(output_path, source['name'])
+
+            fig_1.savefig(filename + '_elevation.png')
+            fig_2.savefig(filename + '_visibility.png')
 
     if not hide:
 
@@ -116,6 +119,4 @@ def entry():
 
     kwargs = docopt(__doc__)
     kwargs = convert_commandline_arguments(kwargs)
-
-    print(kwargs)
     main(**kwargs)
