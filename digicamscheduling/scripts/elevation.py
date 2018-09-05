@@ -11,19 +11,19 @@ Options:
  --end_date=DATE              Ending date (UTC) YYYY-MM-DD HH:MM:SS. If not
                               specified it will consider current time + 1 day
  --time_step=MINUTES          Time steps in minutes
-                              [default: 1]
+                              [Default: 1]
  --output_path=PATH           Path to save the figure. If not specified the
                               figures will not be saved
  --location_filename=PATH     PATH for location config file
-                              [default: digicamscheduling/config/location_krakow.txt]
+                              [Default: digicamscheduling/config/location_krakow.txt]
  --sources_filename=PATH      PATH for catalog
-                              [default: digicamscheduling/config/catalog.json]
+                              [Default: digicamscheduling/config/catalog.json]
  --environment_filename=PATH  PATH for environmental limitations
-                              [default: digicamscheduling/config/environmental_limitation.txt]
+                              [Default: digicamscheduling/config/environmental_limitation.txt]
  --show                       View directly the plot
                               [Default: True]
  --threshold=N                Threshold for visibility
-                              [default: 0.0]
+                              [Default: 0.0]
  --use_moon                   Choose to use moon to compute source visibility
                               [Default: False]
 """

@@ -11,8 +11,8 @@ def convert_commandline_arguments(args):
 
 
     schema = {'location_filename': Use(str),
-              'sources_filename': Use(str),
-              'environment_filename': Use(str),
+              Optional('sources_filename'): Use(str),
+              Optional('environment_filename'): Use(str),
               'start_date': Use(
                   lambda s: Time.now() if s is None else Time(s)),
               'end_date':
