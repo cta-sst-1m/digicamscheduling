@@ -28,7 +28,8 @@ def plot_trees(azimuth, elevation, axis=None, **kwargs):
 
 if __name__ == '__main__':
 
-    filename = 'digicamscheduling/config/environmental_limitation.txt'
+    filename = 'digicamscheduling/config/digicamextra/' \
+               'environmental_limitation.txt'
     alt, az = reader.read_environmental_limits(filename) * u.deg
     env_limits_function = environement.interpolate_environmental_limits(alt,
                                                                         az)
