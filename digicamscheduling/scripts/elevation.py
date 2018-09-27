@@ -37,6 +37,7 @@ from digicamscheduling.display.plot import plot_elevation, plot_source
 from digicamscheduling.utils.docopt import convert_commandline_arguments
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import cm
+from labellines import labelLine, labelLines
 from tqdm import tqdm
 import os
 
@@ -103,6 +104,11 @@ def main(sources_filename, location_filename, environment_filename,
             plot_source(date, source_visibility,
                         axes=axes_2, color=c, y_label='visibility []',
                         ylim=[threshold, 1], label=label)
+
+    lines_1 = axes_1.get_lines()
+    lines_2 = axes_2.get_lines()
+    labelLines(lines_1, fontsize=10, align=True)
+    labelLines(lines_2, fontsize=10, align=True)
 
     if output_path is not None:
 

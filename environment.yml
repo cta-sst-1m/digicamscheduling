@@ -15,4 +15,5 @@ dependencies:
 - scipy
 - tqdm
 - pip:
+  - matplotlib-label-lines
   - PyAstronomy

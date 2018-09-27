@@ -34,12 +34,25 @@ def plot_source(date, position, y_label='', axes=None, ylim=None, **kwargs):
         fig = plt.figure()
         axes = fig.add_subplot(111)
 
-    axes.plot_date(date.plot_date, position, **kwargs)
-    axes.set_xlabel('UTC time')
-    axes.set_ylabel(y_label)
+    try:
+
+        y = position.value
+
+    except Exception:
+
+        y = position
+
+        pass
+
     if ylim is not None:
         axes.set_ylim(ylim)
-    axes.legend(loc='best')
+        mask = (y > ylim[0]) * (y < ylim[1])
+        y = np.ma.masked_array(y, ~mask)
+
+    axes.plot_date(date.plot_date, y, **kwargs)
+    axes.set_xlabel('UTC time')
+    axes.set_ylabel(y_label)
+
     plt.gcf().autofmt_xdate()
     for tick in axes.get_xticklabels():
         tick.set_rotation(45)
