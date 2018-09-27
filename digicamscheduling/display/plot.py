@@ -1,11 +1,10 @@
-import matplotlib.pyplot as plt
 import astropy.units as u
+import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.dates import DateFormatter
 
 
 def plot_source(date, position, y_label='', axes=None, ylim=None, **kwargs):
-
     """
     fig = axes.get_figure()
     temp = date.mjd - date.mjd.min()
@@ -128,19 +127,16 @@ def plot_source(date, position, y_label='', axes=None, ylim=None, **kwargs):
 
 
 def plot_azimuth(date, azimuth, axes=None, **kwargs):
-
     return plot_source(date, azimuth, y_label='azimuth [deg]', axes=axes,
                        **kwargs)
 
 
 def plot_elevation(date, elevation, axes=None, **kwargs):
-
     return plot_source(date, elevation, y_label='elevation [deg]', axes=axes,
                        ylim=[0, 90], linestyle='None', marker='.', **kwargs)
 
 
 def plot_trajectory(azimuth, elevation, axes=None, **kwargs):
-
     if axes is None:
         fig = plt.figure()
         axes = fig.add_subplot(111, projection='polar')
@@ -160,7 +156,6 @@ def plot_trajectory(azimuth, elevation, axes=None, **kwargs):
 
 
 def plot_moon_phase(date, phase, axes=None, **kwargs):
-
     if axes is None:
         fig = plt.figure()
         axes = fig.add_subplot(111)
@@ -181,7 +176,6 @@ def plot_moon_phase(date, phase, axes=None, **kwargs):
 def plot_source_2d(source_elevation, coordinates, source=None,
                    c_label='elevation [deg]', extent=None,
                    cmap=plt.get_cmap('RdYlGn'), axes=None, **kwargs):
-
     if axes is None:
         fig = plt.figure()
         axes = fig.add_subplot(111)
@@ -194,10 +188,9 @@ def plot_source_2d(source_elevation, coordinates, source=None,
     )
 
     if source is not None:
-
         title += '\nSource : {} ({}, {}) [ra, dec] deg'.format(source['name'],
                                                                source['ra'],
-                                                                source['dec'])
+                                                               source['dec'])
 
     axes.set_title(title, fontsize=20)
 
@@ -218,15 +211,14 @@ def plot_source_2d(source_elevation, coordinates, source=None,
 
 
 def plot_sun_2d(sun_elevation, coordinates, extent, axes=None, **kwargs):
-
     if axes is None:
         fig = plt.figure()
         axes = fig.add_subplot(111)
 
     axes = plot_source_2d(sun_elevation, coordinates, extent=extent,
-                               vmin=-90, vmax=90, axes=axes,
-                               cmap=plt.get_cmap('RdYlGn_r'),
-                               c_label='Sun elevation [deg]', **kwargs)
+                          vmin=-90, vmax=90, axes=axes,
+                          cmap=plt.get_cmap('RdYlGn_r'),
+                          c_label='Sun elevation [deg]', **kwargs)
 
     cs = axes.contour(sun_elevation.T, levels=[-18., -12., -6., -0.],
                       extent=extent, cmap='binary_r')
