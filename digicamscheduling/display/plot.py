@@ -2,6 +2,8 @@ import astropy.units as u
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.dates import DateFormatter
+import healpy as hp
+from astropy.coordinates import SkyCoord
 
 
 def plot_source(date, position, y_label='', axes=None, ylim=None, **kwargs):
@@ -227,5 +229,91 @@ def plot_sun_2d(sun_elevation, coordinates, extent, axes=None, **kwargs):
                       'Horizon']
     fmt = dict(zip(cs.levels, contour_labels))
     axes.clabel(cs, fmt=fmt)
+
+    return axes
+
+
+def to_ticks_label(x):
+    y = []
+    x = np.degrees(x)
+
+    for i, val in enumerate(x):
+
+        if (i == 0 or i == len(x) - 1):
+
+            y.append(str(int(val)) + '°')
+        else:
+            y.append('')
+
+    return y
+
+
+def plot_labels(axes=None, x_label='', y_label=''):
+    axes.grid(True)
+    x_ticks = np.linspace(1, -1, num=13) * np.pi
+    x_ticks_bis = np.copy(x_ticks)
+    x_ticks_bis[0] = x_ticks_bis[0] + np.pi / 12
+    x_ticks_bis[-1] = x_ticks_bis[-1] - np.pi / 18
+
+    axes.set_xticks(x_ticks_bis)
+    # x_ticks = -(x_ticks - np.pi)
+    x_ticks_label = to_ticks_label(x_ticks)
+    axes.set_xticklabels(x_ticks_label, fontdict={'verticalalignment': 'center',
+                                                  'horizontalalignment': 'center'}
+                         )
+
+    y_ticks = np.linspace(-1 / 2, 1 / 2, num=7) * np.pi
+    y_ticks_label = to_ticks_label(y_ticks)
+    axes.set_yticks(y_ticks)
+    axes.set_yticklabels(y_ticks_label, fontdict={'verticalalignment': 'center',
+                                                  'horizontalalignment': 'center'})
+
+    axes.set_xlabel(x_label)
+    axes.set_ylabel(y_label)
+
+    return axes
+
+
+def astropy_galactic_to_matplotlib(theta, phi):
+
+    theta = np.atleast_1d(theta)
+    phi = np.atleast_1d(phi)
+
+    x_galactic = - phi + np.pi
+    mask = x_galactic > 0
+    x_galactic[mask] = x_galactic[mask] - np.pi
+    x_galactic[~mask] = x_galactic[~mask] + np.pi
+    phi = x_galactic
+
+    return theta, phi
+
+
+def astropy_to_matplotlib(theta, phi):
+
+    y = np.atleast_1d(theta)
+    x = np.atleast_1d(phi)
+    x = - x + np.pi
+
+    return y, x
+
+
+def plot_sky_coord(ra, dec, galactic=False, axes=None, **kwargs):
+
+    if axes is None:
+
+        fig = plt.figure()
+        axes = fig.add_subplot(111)
+
+    y, x = astropy_to_matplotlib(dec, ra)
+
+    if galactic:
+
+        sky = SkyCoord(ra=ra * u.rad, dec=dec * u.rad, frame='icrs')
+        coord = sky.transform_to('galactic')
+        b = coord.b.radian
+        l = coord.l.radian
+        y, x = astropy_galactic_to_matplotlib(b, l)
+
+    axes.scatter(x, y, **kwargs)
 
     return axes
