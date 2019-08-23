@@ -2,15 +2,20 @@ name: digicamscheduling
 channels:
 - astropy
 - anaconda
+- conda-forge
 - defaults
 - omnia
 dependencies:
 - astropy
 - cython
 - docopt
+- healpy
+- jupyter
 - matplotlib
 - numpy
 - pandas
+- pip
+- pyyaml
 - schema
 - scipy
 - tqdm

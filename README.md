@@ -7,7 +7,7 @@ Scheduling package for SST-1M observations
 ### Prerequisites
 
 ```
-Numpy, Scipy, Astropy, PyAstronomy, Matplolib, Pandas, Tqdm, Cython, Docopt
+Numpy, Scipy, Astropy, PyAstronomy, Matplolib, Pandas, Tqdm, Cython, Docopt, Healpy
 ```
 
 ### Installing (with Anaconda)
